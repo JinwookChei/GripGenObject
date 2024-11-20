@@ -4,11 +4,9 @@
 #include "VRPawn.h"
 #include "Camera/CameraComponent.h"
 #include "MotionControllerComponent.h"
-//#include "Oculus/OculusXR/Source/OculusXRInput/Public/OculusXRHandComponent.h"
 #include "OculusXRHandComponent.h"
-#include "OculusXRHMDTypes.h"
 #include "OculusXRInputFunctionLibrary.h"
-
+#include "HeadMountedDisplayFunctionLibrary.h"
 
 
 // Sets default values
@@ -55,6 +53,8 @@ void AVRPawn::BeginPlay()
 {
 	Super::BeginPlay();
 	
+ 
+
 }
 
 // Called every frame
