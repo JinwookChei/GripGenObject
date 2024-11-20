@@ -50,6 +50,92 @@ private:
 	// OculusXR Hand - ¿Þ¼Õ
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	class UOculusXRHandComponent* LeftHand;
+
+
+protected:
+    // StaticMeshComponents for hand joints
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    UStaticMeshComponent* WristRoot;
+
+    /*UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    UStaticMeshComponent* Forearm_Stub;*/
+
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    UStaticMeshComponent* Thumb0;
+
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    UStaticMeshComponent* Thumb1;
+
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    UStaticMeshComponent* Thumb2;
+
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    UStaticMeshComponent* Thumb3;
+
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    UStaticMeshComponent* Index1;
+
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    UStaticMeshComponent* Index2;
+
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    UStaticMeshComponent* Index3;
+
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    UStaticMeshComponent* Middle1;
+
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    UStaticMeshComponent* Middle2;
+
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    UStaticMeshComponent* Middle3;
+
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    UStaticMeshComponent* Ring1;
+
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    UStaticMeshComponent* Ring2;
+
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    UStaticMeshComponent* Ring3;
+
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    UStaticMeshComponent* Pinky0;
+
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    UStaticMeshComponent* Pinky1;
+
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    UStaticMeshComponent* Pinky2;
+
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    UStaticMeshComponent* Pinky3;
+
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    UStaticMeshComponent* Thumb_Tip;
+
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    UStaticMeshComponent* Index_Tip;
+
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    UStaticMeshComponent* Middle_Tip;
+
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    UStaticMeshComponent* Ring_Tip;
+
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    UStaticMeshComponent* Pinky_Tip;
+
+    //
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    TMap<FName, UStaticMeshComponent*> HandJointMeshes;
+
 	
-	
+protected:
+	//UStaticMeshComponent* CreateBoneStaticMeshComponent(const FString& Name, USceneComponent* Parent);
+    void InitializeJointMeshComponent();
+
+    void AppendJointMeshToHandJointMeshes();
+
+	void PlaceJointMeshOnHandJoints();
 };
