@@ -58,10 +58,22 @@ void UHandTrackingDataComponent::Initialize_CSVData()
 {
     TickCnt = 0;
 
-    Filename = FPaths::ProjectDir() + TEXT("JointData.csv");
+    //Filename = FPaths::ProjectDir() + TEXT("JointData.csv");
+
+    // 저장 폴더 경로 지정 (Saved/HandTrackingData)
+    FString Directory = FPaths::Combine(FPaths::ProjectDir(), TEXT("HandTrackingData"));
+
+    // 디렉터리 생성 (없는 경우)
+    if (!IFileManager::Get().DirectoryExists(*Directory))
+    {
+        IFileManager::Get().MakeDirectory(*Directory, true);
+    }
+
+    // 파일 경로 지정
+    Filename = FPaths::Combine(Directory, TEXT("JointData.csv"));
 
     // Initialize the CSV data string with the header (optional, but useful for clarity)
-    CSVData = TEXT("WristRoot_Pitch,WristRoot_Yaw,WristRoot_Roll,WristRoot_X,WristRoot_Y,WristRoot_Z,Lable,");
+    CSVData = TEXT("WristRoot_Pitch,WristRoot_Yaw,WristRoot_Roll,WristRoot_X,WristRoot_Y,WristRoot_Z,");
     CSVData += TEXT("Thumb0_Rotation_Pitch,Thumb0_Rotation_Yaw,Thumb0_Rotation_Roll,Thumb0_Location_X,Thumb0_Location_Y,Thumb0_Location_Z,");
     CSVData += TEXT("Thumb1_Rotation_Pitch,Thumb1_Rotation_Yaw,Thumb1_Rotation_Roll,Thumb1_Location_X,Thumb1_Location_Y,Thumb1_Location_Z,");
     CSVData += TEXT("Thumb2_Rotation_Pitch,Thumb2_Rotation_Yaw,Thumb2_Rotation_Roll,Thumb2_Location_X,Thumb2_Location_Y,Thumb2_Location_Z,");
@@ -99,9 +111,10 @@ void UHandTrackingDataComponent::ExportHandDatasToCSV(UOculusXRHandComponent* _H
 {
     for (auto& HandPair : _HandJointMeshes)
     {
+
         FVector JointLocation;
         FRotator JointRotation;
-        if(HandPair.Key == FName("WristRoot"))
+        if(HandPair.Key.ToString() == "Wrist Root")
         {
             UCameraComponent* OwnerCameraComponent = OwnerPawn->GetComponentByClass<UCameraComponent>();
             FTransform CameraTransform = OwnerCameraComponent->GetComponentTransform();
@@ -124,22 +137,22 @@ void UHandTrackingDataComponent::ExportHandDatasToCSV(UOculusXRHandComponent* _H
     switch (_HandDataLabel)
     {
         case EHandDataLabel::Idle:
-            CSVData += FString::Printf(TEXT("%f\n"), EHandDataLabel::Idle);
+            CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::Idle);
             break;
         case EHandDataLabel::Pistol:
-            CSVData += FString::Printf(TEXT("%f\n"), EHandDataLabel::Pistol);
+            CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::Pistol);
             break;
         case EHandDataLabel::Drill:
-            CSVData += FString::Printf(TEXT("%f\n"), EHandDataLabel::Drill);
+            CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::Drill);
             break;
         case EHandDataLabel::Sword:
-            CSVData += FString::Printf(TEXT("%f\n"), EHandDataLabel::Sword);
+            CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::Sword);
             break;
         case EHandDataLabel::Dagger:
-            CSVData += FString::Printf(TEXT("%f\n"), EHandDataLabel::Dagger);
+            CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::Dagger);
             break;
         case EHandDataLabel::KitchenKnife:
-            CSVData += FString::Printf(TEXT("%f\n"), EHandDataLabel::KitchenKnife);
+            CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::KitchenKnife);
             break;
         default:
             break;
@@ -155,6 +168,8 @@ void UHandTrackingDataComponent::ExportHandDatasToCSV(UOculusXRHandComponent* _H
     {
         UE_LOG(LogTemp, Error, TEXT("Failed to create CSV file at %s"), *Filename);
     }
+
+    GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, TEXT("Writing Hand Data File"));
 }
 
 void UHandTrackingDataComponent::ExportHandDatasToCSV_Loop()

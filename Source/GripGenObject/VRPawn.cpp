@@ -8,6 +8,8 @@
 #include "OculusXRInputFunctionLibrary.h"
 #include "HeadMountedDisplayFunctionLibrary.h"
 
+#include "HandTrackingDataComponent.h"
+
 
 // Sets default values
 AVRPawn::AVRPawn()
@@ -47,6 +49,9 @@ AVRPawn::AVRPawn()
     LeftHand->SetupAttachment(LeftController);
     LeftHand->SkeletonType = EOculusXRHandType::HandLeft;
 
+    // HandTrackingDataComponent
+    HandTrackingDataComponent = CreateDefaultSubobject<UHandTrackingDataComponent>(TEXT("HandTrackingDataComponent"));
+    
 
     InitializeJointMeshComponent();
 
@@ -82,7 +87,7 @@ void AVRPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void AVRPawn::InitializeJointMeshComponent()
 {
     // StaticMeshComponents »ý¼º ¹× ºÎÂø
-    WristRoot = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Wrist Root"));
+    WristRoot = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WristRoot"));
     WristRoot->SetupAttachment(RightHand);
 
     //Forearm_Stub = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Forearm_Stub"));
@@ -139,19 +144,19 @@ void AVRPawn::InitializeJointMeshComponent()
     Pinky3 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Pinky3"));
     Pinky3->SetupAttachment(RightHand);
 
-    Thumb_Tip = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Thumb Tip"));
+    Thumb_Tip = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ThumbTip"));
     Thumb_Tip->SetupAttachment(RightHand);
 
-    Index_Tip = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Index Tip"));
+    Index_Tip = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("IndexTip"));
     Index_Tip->SetupAttachment(RightHand);
 
-    Middle_Tip = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Middle Tip"));
+    Middle_Tip = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MiddleTip"));
     Middle_Tip->SetupAttachment(RightHand);
 
-    Ring_Tip = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Ring Tip"));
+    Ring_Tip = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RingTip"));
     Ring_Tip->SetupAttachment(RightHand);
 
-    Pinky_Tip = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Pinky Tip"));
+    Pinky_Tip = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PinkyTip"));
     Pinky_Tip->SetupAttachment(RightHand);
 }
 

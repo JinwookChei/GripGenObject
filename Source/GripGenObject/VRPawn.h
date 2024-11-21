@@ -72,6 +72,10 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	class UOculusXRHandComponent* LeftHand;
 
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+    class UHandTrackingDataComponent* HandTrackingDataComponent;
+
+
 
 protected:
     // StaticMeshComponents for hand joints
