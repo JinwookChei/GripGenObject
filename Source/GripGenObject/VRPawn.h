@@ -6,6 +6,27 @@
 #include "GameFramework/Pawn.h"
 #include "VRPawn.generated.h"
 
+
+
+UENUM(BlueprintType) // Blueprint에서 사용 가능하도록 선언
+enum class EHandType : uint8
+{
+    RightHand UMETA(DisplayName = "Right Hand"),
+    LeftHand UMETA(DisplayName = "Left Hand"),
+};
+
+UENUM(BlueprintType) // Blueprint에서 사용 가능하도록 선언
+enum class EHandDataLabel : uint8
+{
+    Idle UMETA(DisplayName = "Idle"),
+    Pistol UMETA(DisplayName = "Pistol"),
+    Drill UMETA(DisplayName = "Drill"),
+    Sword UMETA(DisplayName = "Sword"),
+    Dagger UMETA(DisplayName = "Dagger"),
+    KitchenKnife UMETA(DisplayName = "KitchenKnife")
+};
+
+
 UCLASS()
 class GRIPGENOBJECT_API AVRPawn : public APawn
 {
@@ -138,4 +159,9 @@ protected:
     void AppendJointMeshToHandJointMeshes();
 
 	void PlaceJointMeshOnHandJoints();
+
+public:
+    UOculusXRHandComponent* GetOculusHand(EHandType _HandType);
+
+    const TMap<FName, UStaticMeshComponent*>& GetHandJointMeshes();
 };

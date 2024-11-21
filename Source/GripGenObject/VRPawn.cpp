@@ -198,9 +198,28 @@ void AVRPawn::PlaceJointMeshOnHandJoints()
         Pair.Value->SetWorldLocation(JointLocation);
         Pair.Value->SetWorldRotation(JointRotation);
 
-        UE_LOG(LogTemp, Display, TEXT("%s :  %f   %f   %f   %f   %f   %f"), *Pair.Key.ToString(), JointLocation.X, JointLocation.Y, JointLocation.Z, JointRotation.Pitch, JointRotation.Yaw, JointRotation.Roll);
+        //UE_LOG(LogTemp, Display, TEXT("%s :  %f   %f   %f   %f   %f   %f"), *Pair.Key.ToString(), JointLocation.X, JointLocation.Y, JointLocation.Z, JointRotation.Pitch, JointRotation.Yaw, JointRotation.Roll);
         
     }
+}
+
+UOculusXRHandComponent* AVRPawn::GetOculusHand(EHandType _HandType)
+{
+    if (_HandType == EHandType::LeftHand)
+    {
+        return LeftHand;
+    }
+    else if (_HandType == EHandType::RightHand)
+    {
+        return RightHand;
+    }
+
+    return nullptr;
+}
+
+const TMap<FName, UStaticMeshComponent*>& AVRPawn::GetHandJointMeshes()
+{
+    return HandJointMeshes;
 }
 
 
