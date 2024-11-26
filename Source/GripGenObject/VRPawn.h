@@ -100,6 +100,9 @@ protected:
     UJointMeshComponent* Thumb3;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    UJointMeshComponent* Thumb_Tip;
+
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
     UJointMeshComponent* Index1;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
@@ -107,6 +110,9 @@ protected:
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
     UJointMeshComponent* Index3;
+
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    UJointMeshComponent* Index_Tip;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
     UJointMeshComponent* Middle1;
@@ -118,6 +124,9 @@ protected:
     UJointMeshComponent* Middle3;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    UJointMeshComponent* Middle_Tip;
+
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
     UJointMeshComponent* Ring1;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
@@ -125,6 +134,9 @@ protected:
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
     UJointMeshComponent* Ring3;
+
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    UJointMeshComponent* Ring_Tip;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
     UJointMeshComponent* Pinky0;
@@ -139,23 +151,14 @@ protected:
     UJointMeshComponent* Pinky3;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    UJointMeshComponent* Thumb_Tip;
-
-    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    UJointMeshComponent* Index_Tip;
-
-    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    UJointMeshComponent* Middle_Tip;
-
-    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    UJointMeshComponent* Ring_Tip;
-
-    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
     UJointMeshComponent* Pinky_Tip;
 
     //
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
     TArray<UJointMeshComponent*> HandJointMeshes;
+
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    TArray<FVector> HandJointMeshLocations;
 
 	
 protected:
@@ -165,6 +168,8 @@ protected:
     void AppendJointMeshToHandJointMeshes();
 
 	void PlaceJointMeshOnHandJoints();
+
+    void DrawDebugJointLines();
 
 public:
     UOculusXRHandComponent* GetOculusHand(EHandType _HandType);

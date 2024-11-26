@@ -10,6 +10,7 @@
 
 #include "HandTrackingDataComponent.h"
 #include "JointMeshComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 
 // Sets default values
@@ -108,6 +109,10 @@ void AVRPawn::InitializeJointMeshComponent()
     Thumb3->SetupAttachment(RightHand);
     WristRoot->SetHandJointType(EHandJoint::Thumb3);
 
+    Thumb_Tip = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Thumb Tip"));
+    Thumb_Tip->SetupAttachment(RightHand);
+    WristRoot->SetHandJointType(EHandJoint::Thumb_Tip);
+
     Index1 = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Index1"));
     Index1->SetupAttachment(RightHand);
     WristRoot->SetHandJointType(EHandJoint::Index1);
@@ -119,6 +124,10 @@ void AVRPawn::InitializeJointMeshComponent()
     Index3 = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Index3"));
     Index3->SetupAttachment(RightHand);
     WristRoot->SetHandJointType(EHandJoint::Index3);
+
+    Index_Tip = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Index Tip"));
+    Index_Tip->SetupAttachment(RightHand);
+    WristRoot->SetHandJointType(EHandJoint::Index_Tip);
 
     Middle1 = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Middle1"));
     Middle1->SetupAttachment(RightHand);
@@ -132,6 +141,10 @@ void AVRPawn::InitializeJointMeshComponent()
     Middle3->SetupAttachment(RightHand);
     WristRoot->SetHandJointType(EHandJoint::Middle3);
 
+    Middle_Tip = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Middle Tip"));
+    Middle_Tip->SetupAttachment(RightHand);
+    WristRoot->SetHandJointType(EHandJoint::Middle_Tip);
+
     Ring1 = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Ring1"));
     Ring1->SetupAttachment(RightHand);
     WristRoot->SetHandJointType(EHandJoint::Ring1);
@@ -143,6 +156,10 @@ void AVRPawn::InitializeJointMeshComponent()
     Ring3 = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Ring3"));
     Ring3->SetupAttachment(RightHand);
     WristRoot->SetHandJointType(EHandJoint::Ring3);
+
+    Ring_Tip = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Ring Tip"));
+    Ring_Tip->SetupAttachment(RightHand);
+    WristRoot->SetHandJointType(EHandJoint::Ring_Tip);
 
     Pinky0 = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Pinky0"));
     Pinky0->SetupAttachment(RightHand);
@@ -160,22 +177,6 @@ void AVRPawn::InitializeJointMeshComponent()
     Pinky3->SetupAttachment(RightHand);
     WristRoot->SetHandJointType(EHandJoint::Pinky3);
 
-    Thumb_Tip = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Thumb Tip"));
-    Thumb_Tip->SetupAttachment(RightHand);
-    WristRoot->SetHandJointType(EHandJoint::Thumb_Tip);
-
-    Index_Tip = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Index Tip"));
-    Index_Tip->SetupAttachment(RightHand);
-    WristRoot->SetHandJointType(EHandJoint::Index_Tip);
-
-    Middle_Tip = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Middle Tip"));
-    Middle_Tip->SetupAttachment(RightHand);
-    WristRoot->SetHandJointType(EHandJoint::Middle_Tip);
-
-    Ring_Tip = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Ring Tip"));
-    Ring_Tip->SetupAttachment(RightHand);
-    WristRoot->SetHandJointType(EHandJoint::Ring_Tip);
-
     Pinky_Tip = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Pinky Tip"));
     Pinky_Tip->SetupAttachment(RightHand);
     WristRoot->SetHandJointType(EHandJoint::Pinky_Tip);
@@ -190,28 +191,27 @@ void AVRPawn::AppendJointMeshToHandJointMeshes()
     HandJointMeshes.Add(Thumb1);
     HandJointMeshes.Add(Thumb2);
     HandJointMeshes.Add(Thumb3);
+    HandJointMeshes.Add(Thumb_Tip);
 
     HandJointMeshes.Add(Index1);
     HandJointMeshes.Add(Index2);
     HandJointMeshes.Add(Index3);
+    HandJointMeshes.Add(Index_Tip);
 
     HandJointMeshes.Add(Middle1);
     HandJointMeshes.Add(Middle2);
     HandJointMeshes.Add(Middle3);
+    HandJointMeshes.Add(Middle_Tip);
 
     HandJointMeshes.Add(Ring1);
     HandJointMeshes.Add(Ring2);
     HandJointMeshes.Add(Ring3);
+    HandJointMeshes.Add(Ring_Tip);
 
     HandJointMeshes.Add(Pinky0);
     HandJointMeshes.Add(Pinky1);
     HandJointMeshes.Add(Pinky2);
     HandJointMeshes.Add(Pinky3);
-
-    HandJointMeshes.Add(Thumb_Tip);
-    HandJointMeshes.Add(Index_Tip);
-    HandJointMeshes.Add(Middle_Tip);
-    HandJointMeshes.Add(Ring_Tip);
     HandJointMeshes.Add(Pinky_Tip);
 }
 
@@ -226,6 +226,21 @@ void AVRPawn::PlaceJointMeshOnHandJoints()
 
         //UE_LOG(LogTemp, Display, TEXT("%s :  %f   %f   %f   %f   %f   %f"), *Pair.Key.ToString(), JointLocation.X, JointLocation.Y, JointLocation.Z, JointRotation.Pitch, JointRotation.Yaw, JointRotation.Roll);
         
+    }
+}
+
+void AVRPawn::DrawDebugJointLines()
+{
+    for (int i = 1; i< HandJointMeshes.Num(); i++)
+    {
+        if (i == 1 || i == 6 || i == 10 || i == 14 || i == 18)
+        {
+            DrawDebugLine(GetWorld(), HandJointMeshes[0]->GetComponentLocation(), HandJointMeshes[i]->GetComponentLocation(), FColor::Green, false, -1.0f);
+        }
+        else
+        {
+            DrawDebugLine(GetWorld(), HandJointMeshes[i-1]->GetComponentLocation(), HandJointMeshes[i]->GetComponentLocation(), FColor::Green, false, -1.0f);
+        }
     }
 }
 
