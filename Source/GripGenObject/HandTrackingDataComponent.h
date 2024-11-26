@@ -47,7 +47,7 @@ private:
 	void Initialize_CSVData();
 
 	UFUNCTION()
-	void ExportHandDatasToCSV(class UOculusXRHandComponent* _Hand, TMap<FName, UStaticMeshComponent*>& _HandJointMeshes, EHandDataLabel _HandDataLabel);
+	void ExportHandDatasToCSV(class UOculusXRHandComponent* _Hand, TArray<class UJointMeshComponent*>& _HandJointMeshes, EHandDataLabel _HandDataLabel);
 
 	void ExportHandDatasToCSV_Loop();
 	

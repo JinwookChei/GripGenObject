@@ -6,6 +6,7 @@
 #include "OculusXRHandComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Camera/CameraComponent.h"
+#include "JointMeshComponent.h"
         
 
 
@@ -107,28 +108,28 @@ void UHandTrackingDataComponent::Initialize_CSVData()
     GEngine->AddOnScreenDebugMessage(-1, DisplayTime, TextColor, Message);
 }
 
-void UHandTrackingDataComponent::ExportHandDatasToCSV(UOculusXRHandComponent* _Hand, TMap<FName, UStaticMeshComponent*>& _HandJointMeshes, EHandDataLabel _HandDataLabel)
+void UHandTrackingDataComponent::ExportHandDatasToCSV(UOculusXRHandComponent* _Hand, TArray<UJointMeshComponent*>& _HandJointMeshes, EHandDataLabel _HandDataLabel)
 {
-    for (auto& HandPair : _HandJointMeshes)
+    for (auto& HandJointMesh : _HandJointMeshes)
     {
 
         FVector JointLocation;
         FRotator JointRotation;
-        if(HandPair.Key.ToString() == "Wrist Root")
+        if(HandJointMesh->GetName() == "Wrist Root")
         {
             UCameraComponent* OwnerCameraComponent = OwnerPawn->GetComponentByClass<UCameraComponent>();
             FTransform CameraTransform = OwnerCameraComponent->GetComponentTransform();
 
-            FVector RightHandLocation = OwnerRightHand->GetBoneLocationByName(HandPair.Key, EBoneSpaces::WorldSpace);
-            FRotator RightHandRotation = OwnerRightHand->GetBoneRotationByName(HandPair.Key, EBoneSpaces::WorldSpace);
+            FVector RightHandLocation = OwnerRightHand->GetBoneLocationByName(HandJointMesh->GetFName(), EBoneSpaces::WorldSpace);
+            FRotator RightHandRotation = OwnerRightHand->GetBoneRotationByName(HandJointMesh->GetFName(), EBoneSpaces::WorldSpace);
 
             JointLocation = CameraTransform.GetLocation() - RightHandLocation;
             JointRotation = CameraTransform.InverseTransformRotation(RightHandRotation.Quaternion()).Rotator();
         }
         else
         {
-            JointLocation = OwnerRightHand->GetBoneLocationByName(HandPair.Key, EBoneSpaces::ComponentSpace);
-            JointRotation = OwnerRightHand->GetBoneRotationByName(HandPair.Key, EBoneSpaces::ComponentSpace);
+            JointLocation = OwnerRightHand->GetBoneLocationByName(HandJointMesh->GetFName(), EBoneSpaces::ComponentSpace);
+            JointRotation = OwnerRightHand->GetBoneRotationByName(HandJointMesh->GetFName(), EBoneSpaces::ComponentSpace);
         }
         
         CSVData += FString::Printf(TEXT("%f,%f,%f,%f,%f,%f,"), JointRotation.Pitch, JointRotation.Yaw, JointRotation.Roll, JointLocation.X, JointLocation.Y, JointLocation.Z);
@@ -176,7 +177,7 @@ void UHandTrackingDataComponent::ExportHandDatasToCSV_Loop()
 {
     if (TickCnt < 2000)
     {
-        TMap<FName, UStaticMeshComponent*> OwnerHandJointMeshes = OwnerPawn->GetHandJointMeshes();
+        TArray<UJointMeshComponent*> OwnerHandJointMeshes = OwnerPawn->GetHandJointMeshes();
         ExportHandDatasToCSV(OwnerRightHand, OwnerHandJointMeshes, HandDataLabel);
         TickCnt++;
 

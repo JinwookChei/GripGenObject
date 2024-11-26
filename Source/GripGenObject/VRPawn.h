@@ -27,6 +27,8 @@ enum class EHandDataLabel : uint8
 };
 
 
+class UJointMeshComponent;
+
 UCLASS()
 class GRIPGENOBJECT_API AVRPawn : public APawn
 {
@@ -80,80 +82,80 @@ private:
 protected:
     // StaticMeshComponents for hand joints
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    UStaticMeshComponent* WristRoot;
+    UJointMeshComponent* WristRoot;
 
     /*UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
     UStaticMeshComponent* Forearm_Stub;*/
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    UStaticMeshComponent* Thumb0;
+    UJointMeshComponent* Thumb0;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    UStaticMeshComponent* Thumb1;
+    UJointMeshComponent* Thumb1;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    UStaticMeshComponent* Thumb2;
+    UJointMeshComponent* Thumb2;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    UStaticMeshComponent* Thumb3;
+    UJointMeshComponent* Thumb3;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    UStaticMeshComponent* Index1;
+    UJointMeshComponent* Index1;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    UStaticMeshComponent* Index2;
+    UJointMeshComponent* Index2;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    UStaticMeshComponent* Index3;
+    UJointMeshComponent* Index3;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    UStaticMeshComponent* Middle1;
+    UJointMeshComponent* Middle1;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    UStaticMeshComponent* Middle2;
+    UJointMeshComponent* Middle2;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    UStaticMeshComponent* Middle3;
+    UJointMeshComponent* Middle3;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    UStaticMeshComponent* Ring1;
+    UJointMeshComponent* Ring1;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    UStaticMeshComponent* Ring2;
+    UJointMeshComponent* Ring2;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    UStaticMeshComponent* Ring3;
+    UJointMeshComponent* Ring3;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    UStaticMeshComponent* Pinky0;
+    UJointMeshComponent* Pinky0;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    UStaticMeshComponent* Pinky1;
+    UJointMeshComponent* Pinky1;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    UStaticMeshComponent* Pinky2;
+    UJointMeshComponent* Pinky2;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    UStaticMeshComponent* Pinky3;
+    UJointMeshComponent* Pinky3;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    UStaticMeshComponent* Thumb_Tip;
+    UJointMeshComponent* Thumb_Tip;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    UStaticMeshComponent* Index_Tip;
+    UJointMeshComponent* Index_Tip;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    UStaticMeshComponent* Middle_Tip;
+    UJointMeshComponent* Middle_Tip;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    UStaticMeshComponent* Ring_Tip;
+    UJointMeshComponent* Ring_Tip;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    UStaticMeshComponent* Pinky_Tip;
+    UJointMeshComponent* Pinky_Tip;
 
     //
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    TMap<FName, UStaticMeshComponent*> HandJointMeshes;
+    TArray<UJointMeshComponent*> HandJointMeshes;
 
 	
 protected:
@@ -167,5 +169,5 @@ protected:
 public:
     UOculusXRHandComponent* GetOculusHand(EHandType _HandType);
 
-    const TMap<FName, UStaticMeshComponent*>& GetHandJointMeshes();
+    TArray<UJointMeshComponent*> GetHandJointMeshes();
 };

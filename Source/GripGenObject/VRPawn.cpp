@@ -9,6 +9,7 @@
 #include "HeadMountedDisplayFunctionLibrary.h"
 
 #include "HandTrackingDataComponent.h"
+#include "JointMeshComponent.h"
 
 
 // Sets default values
@@ -87,121 +88,141 @@ void AVRPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void AVRPawn::InitializeJointMeshComponent()
 {
     // StaticMeshComponents »ý¼º ¹× ºÎÂø
-    WristRoot = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WristRoot"));
+    WristRoot = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Wrist Root"));
     WristRoot->SetupAttachment(RightHand);
+    WristRoot->SetHandJointType(EHandJoint::WristRoot);
 
-    //Forearm_Stub = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Forearm_Stub"));
-    //Forearm_Stub->SetupAttachment(RightHand);
-
-    Thumb0 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Thumb0"));
+    Thumb0 = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Thumb0"));
     Thumb0->SetupAttachment(RightHand);
+    WristRoot->SetHandJointType(EHandJoint::Thumb0);
 
-    Thumb1 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Thumb1"));
+    Thumb1 = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Thumb1"));
     Thumb1->SetupAttachment(RightHand);
+    WristRoot->SetHandJointType(EHandJoint::Thumb1);
 
-    Thumb2 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Thumb2"));
+    Thumb2 = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Thumb2"));
     Thumb2->SetupAttachment(RightHand);
+    WristRoot->SetHandJointType(EHandJoint::Thumb2);
 
-    Thumb3 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Thumb3"));
+    Thumb3 = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Thumb3"));
     Thumb3->SetupAttachment(RightHand);
+    WristRoot->SetHandJointType(EHandJoint::Thumb3);
 
-    Index1 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Index1"));
+    Index1 = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Index1"));
     Index1->SetupAttachment(RightHand);
+    WristRoot->SetHandJointType(EHandJoint::Index1);
 
-    Index2 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Index2"));
+    Index2 = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Index2"));
     Index2->SetupAttachment(RightHand);
+    WristRoot->SetHandJointType(EHandJoint::Index2);
 
-    Index3 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Index3"));
+    Index3 = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Index3"));
     Index3->SetupAttachment(RightHand);
+    WristRoot->SetHandJointType(EHandJoint::Index3);
 
-    Middle1 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Middle1"));
+    Middle1 = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Middle1"));
     Middle1->SetupAttachment(RightHand);
+    WristRoot->SetHandJointType(EHandJoint::Middle1);
 
-    Middle2 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Middle2"));
+    Middle2 = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Middle2"));
     Middle2->SetupAttachment(RightHand);
+    WristRoot->SetHandJointType(EHandJoint::Middle2);
 
-    Middle3 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Middle3"));
+    Middle3 = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Middle3"));
     Middle3->SetupAttachment(RightHand);
+    WristRoot->SetHandJointType(EHandJoint::Middle3);
 
-    Ring1 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Ring1"));
+    Ring1 = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Ring1"));
     Ring1->SetupAttachment(RightHand);
+    WristRoot->SetHandJointType(EHandJoint::Ring1);
 
-    Ring2 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Ring2"));
+    Ring2 = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Ring2"));
     Ring2->SetupAttachment(RightHand);
+    WristRoot->SetHandJointType(EHandJoint::Ring2);
 
-    Ring3 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Ring3"));
+    Ring3 = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Ring3"));
     Ring3->SetupAttachment(RightHand);
+    WristRoot->SetHandJointType(EHandJoint::Ring3);
 
-    Pinky0 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Pinky0"));
+    Pinky0 = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Pinky0"));
     Pinky0->SetupAttachment(RightHand);
+    WristRoot->SetHandJointType(EHandJoint::Pinky0);
 
-    Pinky1 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Pinky1"));
+    Pinky1 = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Pinky1"));
     Pinky1->SetupAttachment(RightHand);
+    WristRoot->SetHandJointType(EHandJoint::Pinky1);
 
-    Pinky2 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Pinky2"));
+    Pinky2 = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Pinky2"));
     Pinky2->SetupAttachment(RightHand);
+    WristRoot->SetHandJointType(EHandJoint::Pinky2);
 
-    Pinky3 = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Pinky3"));
+    Pinky3 = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Pinky3"));
     Pinky3->SetupAttachment(RightHand);
+    WristRoot->SetHandJointType(EHandJoint::Pinky3);
 
-    Thumb_Tip = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ThumbTip"));
+    Thumb_Tip = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Thumb Tip"));
     Thumb_Tip->SetupAttachment(RightHand);
+    WristRoot->SetHandJointType(EHandJoint::Thumb_Tip);
 
-    Index_Tip = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("IndexTip"));
+    Index_Tip = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Index Tip"));
     Index_Tip->SetupAttachment(RightHand);
+    WristRoot->SetHandJointType(EHandJoint::Index_Tip);
 
-    Middle_Tip = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MiddleTip"));
+    Middle_Tip = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Middle Tip"));
     Middle_Tip->SetupAttachment(RightHand);
+    WristRoot->SetHandJointType(EHandJoint::Middle_Tip);
 
-    Ring_Tip = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RingTip"));
+    Ring_Tip = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Ring Tip"));
     Ring_Tip->SetupAttachment(RightHand);
+    WristRoot->SetHandJointType(EHandJoint::Ring_Tip);
 
-    Pinky_Tip = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("PinkyTip"));
+    Pinky_Tip = CreateDefaultSubobject<UJointMeshComponent>(TEXT("Pinky Tip"));
     Pinky_Tip->SetupAttachment(RightHand);
+    WristRoot->SetHandJointType(EHandJoint::Pinky_Tip);
 }
 
 void AVRPawn::AppendJointMeshToHandJointMeshes()
 {
-    HandJointMeshes.Add(FName("Wrist Root"), WristRoot);
+    HandJointMeshes.Add(WristRoot);
     //HandJointMeshes.Add(FName("Forearm_Stub"), Forearm_Stub);
 
-    HandJointMeshes.Add(FName("Thumb0"), Thumb0);
-    HandJointMeshes.Add(FName("Thumb1"), Thumb1);
-    HandJointMeshes.Add(FName("Thumb2"), Thumb2);
-    HandJointMeshes.Add(FName("Thumb3"), Thumb3);
+    HandJointMeshes.Add(Thumb0);
+    HandJointMeshes.Add(Thumb1);
+    HandJointMeshes.Add(Thumb2);
+    HandJointMeshes.Add(Thumb3);
 
-    HandJointMeshes.Add(FName("Index1"), Index1);
-    HandJointMeshes.Add(FName("Index2"), Index2);
-    HandJointMeshes.Add(FName("Index3"), Index3);
+    HandJointMeshes.Add(Index1);
+    HandJointMeshes.Add(Index2);
+    HandJointMeshes.Add(Index3);
 
-    HandJointMeshes.Add(FName("Middle1"), Middle1);
-    HandJointMeshes.Add(FName("Middle2"), Middle2);
-    HandJointMeshes.Add(FName("Middle3"), Middle3);
+    HandJointMeshes.Add(Middle1);
+    HandJointMeshes.Add(Middle2);
+    HandJointMeshes.Add(Middle3);
 
-    HandJointMeshes.Add(FName("Ring1"), Ring1);
-    HandJointMeshes.Add(FName("Ring2"), Ring2);
-    HandJointMeshes.Add(FName("Ring3"), Ring3);
+    HandJointMeshes.Add(Ring1);
+    HandJointMeshes.Add(Ring2);
+    HandJointMeshes.Add(Ring3);
 
-    HandJointMeshes.Add(FName("Pinky0"), Pinky0);
-    HandJointMeshes.Add(FName("Pinky1"), Pinky1);
-    HandJointMeshes.Add(FName("Pinky2"), Pinky2);
-    HandJointMeshes.Add(FName("Pinky3"), Pinky3);
+    HandJointMeshes.Add(Pinky0);
+    HandJointMeshes.Add(Pinky1);
+    HandJointMeshes.Add(Pinky2);
+    HandJointMeshes.Add(Pinky3);
 
-    HandJointMeshes.Add(FName("Thumb Tip"), Thumb_Tip);
-    HandJointMeshes.Add(FName("Index Tip"), Index_Tip);
-    HandJointMeshes.Add(FName("Middle Tip"), Middle_Tip);
-    HandJointMeshes.Add(FName("Ring Tip"), Ring_Tip);
-    HandJointMeshes.Add(FName("Pinky Tip"), Pinky_Tip);
+    HandJointMeshes.Add(Thumb_Tip);
+    HandJointMeshes.Add(Index_Tip);
+    HandJointMeshes.Add(Middle_Tip);
+    HandJointMeshes.Add(Ring_Tip);
+    HandJointMeshes.Add(Pinky_Tip);
 }
 
 void AVRPawn::PlaceJointMeshOnHandJoints()
 {
-    for (auto& Pair : HandJointMeshes)
+    for (auto& HandJoint : HandJointMeshes)
     {
-        FVector JointLocation = RightHand->GetBoneLocationByName(Pair.Key, EBoneSpaces::WorldSpace);
-        FRotator JointRotation = RightHand->GetBoneRotationByName(Pair.Key, EBoneSpaces::WorldSpace);
-        Pair.Value->SetWorldLocation(JointLocation);
-        Pair.Value->SetWorldRotation(JointRotation);
+        FVector JointLocation = RightHand->GetBoneLocationByName(HandJoint->GetFName(), EBoneSpaces::WorldSpace);
+        FRotator JointRotation = RightHand->GetBoneRotationByName(HandJoint->GetFName(), EBoneSpaces::WorldSpace);
+        HandJoint->SetWorldLocation(JointLocation);
+        HandJoint->SetWorldRotation(JointRotation);
 
         //UE_LOG(LogTemp, Display, TEXT("%s :  %f   %f   %f   %f   %f   %f"), *Pair.Key.ToString(), JointLocation.X, JointLocation.Y, JointLocation.Z, JointRotation.Pitch, JointRotation.Yaw, JointRotation.Roll);
         
@@ -222,7 +243,7 @@ UOculusXRHandComponent* AVRPawn::GetOculusHand(EHandType _HandType)
     return nullptr;
 }
 
-const TMap<FName, UStaticMeshComponent*>& AVRPawn::GetHandJointMeshes()
+TArray<UJointMeshComponent*> AVRPawn::GetHandJointMeshes()
 {
     return HandJointMeshes;
 }
