@@ -54,9 +54,7 @@ AVRPawn::AVRPawn()
     // HandTrackingDataComponent
     HandTrackingDataComponent = CreateDefaultSubobject<UHandTrackingDataComponent>(TEXT("HandTrackingDataComponent"));
     
-
     InitializeJointMeshComponent();
-
 }
 
 // Called when the game starts or when spawned
@@ -66,7 +64,6 @@ void AVRPawn::BeginPlay()
 
     AppendJointMeshToHandJointMeshes();
  
-
 }
 
 // Called every frame
@@ -219,30 +216,62 @@ void AVRPawn::PlaceJointMeshOnHandJoints()
 {
     for (auto& HandJoint : HandJointMeshes)
     {
-        FVector JointLocation = RightHand->GetBoneLocationByName(HandJoint->GetFName(), EBoneSpaces::WorldSpace);
+        if (RightHand)
+        {
+            UE_LOG(LogTemp, Warning, TEXT("Righthand NOt NULL"));
+        }
+        //RightHand->GetBoneLocation
+        //FVector JointLocation = RightHand->GetBoneLocationByName(HandJoint->GetFName(), EBoneSpaces::WorldSpace);
         FRotator JointRotation = RightHand->GetBoneRotationByName(HandJoint->GetFName(), EBoneSpaces::WorldSpace);
-        HandJoint->SetWorldLocation(JointLocation);
-        HandJoint->SetWorldRotation(JointRotation);
+        FVector JointLocation = RightHand->GetBoneLocation(HandJoint->GetFName(), EBoneSpaces::WorldSpace);
+        //FRotator JointRotation = RightHand->GetBoneRota(HandJoint->GetFName(), EBoneSpaces::WorldSpace);
+        //HandJoint->SetWorldLocation(JointLocation);
+        //HandJoint->SetWorldRotation(JointRotation);
 
-        //UE_LOG(LogTemp, Display, TEXT("%s :  %f   %f   %f   %f   %f   %f"), *Pair.Key.ToString(), JointLocation.X, JointLocation.Y, JointLocation.Z, JointRotation.Pitch, JointRotation.Yaw, JointRotation.Roll);
-        
+        UE_LOG(LogTemp, Display, TEXT("%s :  %f   %f   %f   %f   %f   %f"), *HandJoint->GetFName().ToString(), JointLocation.X, JointLocation.Y, JointLocation.Z, JointRotation.Pitch, JointRotation.Yaw, JointRotation.Roll);
+        //UE_LOG(LogTemp, Display, TEXT("%s"), *HandJoint->GetName());
     }
 }
 
-void AVRPawn::DrawDebugJointLines()
+void AVRPawn::CalculateRelativeJoint()
 {
+    HandJointMeshLocations.Empty();
+
     for (int i = 1; i< HandJointMeshes.Num(); i++)
     {
         if (i == 1 || i == 6 || i == 10 || i == 14 || i == 18)
         {
-            DrawDebugLine(GetWorld(), HandJointMeshes[0]->GetComponentLocation(), HandJointMeshes[i]->GetComponentLocation(), FColor::Green, false, -1.0f);
+            FVector ParentJointLocation = HandJointMeshes[0]->GetComponentLocation();
+            FVector ChildJointLocation = HandJointMeshes[i]->GetComponentLocation();
+            HandJointMeshLocations.Add(ChildJointLocation - ParentJointLocation);
+
+            FQuat ParentJointQuat = HandJointMeshes[0]->GetComponentQuat();
+            FQuat ChildJointQuat = HandJointMeshes[i]->GetComponentQuat();
+
+            FQuat RelativeQuat = ChildJointQuat * ParentJointQuat.Inverse();
+            FRotator RelativeRotation = RelativeQuat.Rotator();
+            HandJointMeshRotations.Add(RelativeRotation);
+
+            DrawDebugLine(GetWorld(), ParentJointLocation, ChildJointLocation, FColor::Green, false, -1.0f);
         }
         else
         {
-            DrawDebugLine(GetWorld(), HandJointMeshes[i-1]->GetComponentLocation(), HandJointMeshes[i]->GetComponentLocation(), FColor::Green, false, -1.0f);
+            FVector ParentJointLocation = HandJointMeshes[i-1]->GetComponentLocation();
+            FVector ChildJointLocation = HandJointMeshes[i]->GetComponentLocation();
+            HandJointMeshLocations.Add(ChildJointLocation - ParentJointLocation);
+
+            FQuat ParentJointQuat = HandJointMeshes[i-1]->GetComponentQuat();
+            FQuat ChildJointQuat = HandJointMeshes[i]->GetComponentQuat();
+
+            FQuat RelativeQuat = ChildJointQuat * ParentJointQuat.Inverse();
+            FRotator RelativeRotation = RelativeQuat.Rotator();
+            HandJointMeshRotations.Add(RelativeRotation);
+
+            DrawDebugLine(GetWorld(), ParentJointLocation, ChildJointLocation, FColor::Green, false, -1.0f);
         }
     }
 }
+
 
 UOculusXRHandComponent* AVRPawn::GetOculusHand(EHandType _HandType)
 {

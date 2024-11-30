@@ -160,6 +160,9 @@ protected:
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
     TArray<FVector> HandJointMeshLocations;
 
+    UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+    TArray<FRotator> HandJointMeshRotations;
+
 	
 protected:
 	//UStaticMeshComponent* CreateBoneStaticMeshComponent(const FString& Name, USceneComponent* Parent);
@@ -169,7 +172,7 @@ protected:
 
 	void PlaceJointMeshOnHandJoints();
 
-    void DrawDebugJointLines();
+    void CalculateRelativeJoint();
 
 public:
     UOculusXRHandComponent* GetOculusHand(EHandType _HandType);

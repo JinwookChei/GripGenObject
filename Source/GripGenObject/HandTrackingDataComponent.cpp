@@ -124,13 +124,20 @@ void UHandTrackingDataComponent::ExportHandDatasToCSV(UOculusXRHandComponent* _H
         if(HandJointMesh->GetName() == "Wrist Root")
         {
             UCameraComponent* OwnerCameraComponent = OwnerPawn->GetComponentByClass<UCameraComponent>();
-            FTransform CameraTransform = OwnerCameraComponent->GetComponentTransform();
+            //FTransform CameraTransform = OwnerCameraComponent->GetComponentTransform();
+            FVector CameraLocation = OwnerCameraComponent->GetComponentLocation();
+            FQuat CameraQuat = OwnerCameraComponent->GetComponentQuat();
 
             FVector RightHandLocation = OwnerRightHand->GetBoneLocationByName(HandJointMesh->GetFName(), EBoneSpaces::WorldSpace);
-            FRotator RightHandRotation = OwnerRightHand->GetBoneRotationByName(HandJointMesh->GetFName(), EBoneSpaces::WorldSpace);
+            //FRotator RightHandRotation = OwnerRightHand->GetBoneRotationByName(HandJointMesh->GetFName(), EBoneSpaces::WorldSpace);
+            FQuat RightHandQuat = OwnerRightHand->GetBoneQuaternion(HandJointMesh->GetFName(), EBoneSpaces::WorldSpace);
 
-            JointLocation = CameraTransform.GetLocation() - RightHandLocation;
-            JointRotation = CameraTransform.InverseTransformRotation(RightHandRotation.Quaternion()).Rotator();
+            JointLocation = CameraLocation - RightHandLocation;
+            FQuat RelativeQuat = RightHandQuat* CameraQuat.Inverse();
+            JointRotation = RelativeQuat.Rotator();
+
+            //JointLocation = CameraTransform.GetLocation() - RightHandLocation;
+            //JointRotation = CameraTransform.InverseTransformRotation(RightHandRotation.Quaternion()).Rotator();
         }
         else
         {
