@@ -4,8 +4,24 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+
+#include "NNE.h"
+#include "NNERuntimeCPU.h"
+#include "NNEModelData.h"
+
 #include "VRPawn.generated.h"
 
+class FMyModelHelper
+{
+public:
+    TSharedPtr<UE::NNE::IModelInstanceCPU> ModelInstance;
+
+    TArray<float> InputData;
+    TArray<float> OutputData;
+    TArray<UE::NNE::FTensorBindingCPU> InputBindings;
+    TArray<UE::NNE::FTensorBindingCPU> OutputBindings;
+    bool bIsRunning;
+};
 
 
 UENUM(BlueprintType) // Blueprint에서 사용 가능하도록 선언
@@ -25,6 +41,7 @@ enum class EHandDataLabel : uint8
     Dagger UMETA(DisplayName = "Dagger"),
     KitchenKnife UMETA(DisplayName = "KitchenKnife")
 };
+
 
 
 class UJointMeshComponent;
@@ -163,7 +180,16 @@ protected:
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
     TArray<FRotator> HandJointMeshRotations;
 
-	
+//public:
+    //UPROPERTY(EditAnywhere)
+    //TObjectPtr<class UNNEModelData> PreLoadedModelData = nullptr;
+
+
+//public:
+//    UPROPERTY(EditAnywhere, Category = "Model")
+//    TObjectPtr<class UNNEModelData> PreLoadedModelData;
+
+
 protected:
 	//UStaticMeshComponent* CreateBoneStaticMeshComponent(const FString& Name, USceneComponent* Parent);
     void InitializeJointMeshComponent();
@@ -178,4 +204,21 @@ public:
     UOculusXRHandComponent* GetOculusHand(EHandType _HandType);
 
     TArray<UJointMeshComponent*> GetHandJointMeshes();
+
+
+
+ //------------------------------- test ----------------------------
+public:
+    UPROPERTY(EditAnywhere)
+    TObjectPtr<UNNEModelData> PreLoadedModelData;
+
+    UPROPERTY(EditAnywhere)
+    TSoftObjectPtr<UNNEModelData> LazyLoadedModelData;
+
+private:
+    TSharedPtr<FMyModelHelper> ModelHelper;
+
+    void NNETest();
+
+    void NNERun();
 };
