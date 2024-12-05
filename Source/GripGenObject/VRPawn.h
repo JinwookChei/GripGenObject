@@ -163,10 +163,10 @@ protected:
     TArray<UJointMeshComponent*> HandJointMeshes;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    TArray<FVector> HandJointMeshLocations;
+    TArray<FVector> HandJointRelativeLocations;
 
     UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
-    TArray<FRotator> HandJointMeshRotations;
+    TArray<FRotator> HandJointRelativeRotations;
 
 protected:
 
@@ -176,10 +176,17 @@ protected:
 
 	void PlaceJointMeshOnHandJoints();
 
-    void CalculateRelativeJoint();
+    //void CalculateRelativeJoint();
 
 public:
+    UFUNCTION()
     UOculusXRHandComponent* GetOculusHand(EHandType _HandType);
 
-    TArray<UJointMeshComponent*> GetHandJointMeshes();
+    UFUNCTION()
+    const TArray<UJointMeshComponent*>& GetHandJointMeshes();
+
+public:
+    TQueue<TArray<double>> JointSequenceData;
+
+    int QueueCount = 0;
 };

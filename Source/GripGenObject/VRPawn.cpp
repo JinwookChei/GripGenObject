@@ -61,14 +61,15 @@ AVRPawn::AVRPawn()
 
     InitializeJointMeshComponent();
 
+    AppendJointMeshToHandJointMeshes();
+
 }
 
 // Called when the game starts or when spawned
 void AVRPawn::BeginPlay()
 {
 	Super::BeginPlay();
-
-    AppendJointMeshToHandJointMeshes();
+   
 }
 
 // Called every frame
@@ -77,7 +78,7 @@ void AVRPawn::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
     PlaceJointMeshOnHandJoints();
-
+    //CalculateRelativeJoint();
 }
 
 
@@ -231,52 +232,54 @@ void AVRPawn::PlaceJointMeshOnHandJoints()
         FRotator JointRotation = RightHand->GetBoneRotationByName(HandJoint->GetFName(), EBoneSpaces::WorldSpace);
         FVector JointLocation = RightHand->GetBoneLocation(HandJoint->GetFName(), EBoneSpaces::WorldSpace);
         //FRotator JointRotation = RightHand->GetBoneRota(HandJoint->GetFName(), EBoneSpaces::WorldSpace);
-        //HandJoint->SetWorldLocation(JointLocation);
-        //HandJoint->SetWorldRotation(JointRotation);
+        HandJoint->SetWorldLocation(JointLocation);
+        HandJoint->SetWorldRotation(JointRotation);
 
         //UE_LOG(LogTemp, Display, TEXT("%s :  %f   %f   %f   %f   %f   %f"), *HandJoint->GetFName().ToString(), JointLocation.X, JointLocation.Y, JointLocation.Z, JointRotation.Pitch, JointRotation.Yaw, JointRotation.Roll);
         //UE_LOG(LogTemp, Display, TEXT("%s"), *HandJoint->GetName());
     }
 }
 
-void AVRPawn::CalculateRelativeJoint()
-{
-    HandJointMeshLocations.Empty();
-
-    for (int i = 1; i< HandJointMeshes.Num(); i++)
-    {
-        if (i == 1 || i == 6 || i == 10 || i == 14 || i == 18)
-        {
-            FVector ParentJointLocation = HandJointMeshes[0]->GetComponentLocation();
-            FVector ChildJointLocation = HandJointMeshes[i]->GetComponentLocation();
-            HandJointMeshLocations.Add(ChildJointLocation - ParentJointLocation);
-
-            FQuat ParentJointQuat = HandJointMeshes[0]->GetComponentQuat();
-            FQuat ChildJointQuat = HandJointMeshes[i]->GetComponentQuat();
-
-            FQuat RelativeQuat = ChildJointQuat * ParentJointQuat.Inverse();
-            FRotator RelativeRotation = RelativeQuat.Rotator();
-            HandJointMeshRotations.Add(RelativeRotation);
-
-            DrawDebugLine(GetWorld(), ParentJointLocation, ChildJointLocation, FColor::Green, false, -1.0f);
-        }
-        else
-        {
-            FVector ParentJointLocation = HandJointMeshes[i-1]->GetComponentLocation();
-            FVector ChildJointLocation = HandJointMeshes[i]->GetComponentLocation();
-            HandJointMeshLocations.Add(ChildJointLocation - ParentJointLocation);
-
-            FQuat ParentJointQuat = HandJointMeshes[i-1]->GetComponentQuat();
-            FQuat ChildJointQuat = HandJointMeshes[i]->GetComponentQuat();
-
-            FQuat RelativeQuat = ChildJointQuat * ParentJointQuat.Inverse();
-            FRotator RelativeRotation = RelativeQuat.Rotator();
-            HandJointMeshRotations.Add(RelativeRotation);
-
-            DrawDebugLine(GetWorld(), ParentJointLocation, ChildJointLocation, FColor::Green, false, -1.0f);
-        }
-    }
-}
+//void AVRPawn::CalculateRelativeJoint()
+//{
+//    HandJointRelativeLocations.Empty();
+//    HandJointRelativeRotations.Empty();
+//
+//    // StartIndex = NextIndex of RootWrist
+//    for (int i = 1; i< HandJointMeshes.Num(); i++)
+//    {
+//        if (i == 1 || i == 6 || i == 10 || i == 14 || i == 18)
+//        {
+//            FVector ParentJointLocation = HandJointMeshes[0]->GetComponentLocation();
+//            FVector ChildJointLocation = HandJointMeshes[i]->GetComponentLocation();
+//            HandJointRelativeLocations.Add(ChildJointLocation - ParentJointLocation);
+//
+//            FQuat ParentJointQuat = HandJointMeshes[0]->GetComponentQuat();
+//            FQuat ChildJointQuat = HandJointMeshes[i]->GetComponentQuat();
+//
+//            FQuat RelativeQuat = ChildJointQuat * ParentJointQuat.Inverse();
+//            FRotator RelativeRotation = RelativeQuat.Rotator();
+//            HandJointRelativeRotations.Add(RelativeRotation);
+//
+//            DrawDebugLine(GetWorld(), ParentJointLocation, ChildJointLocation, FColor::Green, false, -1.0f);
+//        }
+//        else
+//        {
+//            FVector ParentJointLocation = HandJointMeshes[i-1]->GetComponentLocation();
+//            FVector ChildJointLocation = HandJointMeshes[i]->GetComponentLocation();
+//            HandJointRelativeLocations.Add(ChildJointLocation - ParentJointLocation);
+//
+//            FQuat ParentJointQuat = HandJointMeshes[i-1]->GetComponentQuat();
+//            FQuat ChildJointQuat = HandJointMeshes[i]->GetComponentQuat();
+//
+//            FQuat RelativeQuat = ChildJointQuat * ParentJointQuat.Inverse();
+//            FRotator RelativeRotation = RelativeQuat.Rotator();
+//            HandJointRelativeRotations.Add(RelativeRotation);
+//
+//            DrawDebugLine(GetWorld(), ParentJointLocation, ChildJointLocation, FColor::Green, false, -1.0f);
+//        }
+//    }
+//}
 
 
 UOculusXRHandComponent* AVRPawn::GetOculusHand(EHandType _HandType)
@@ -293,9 +296,8 @@ UOculusXRHandComponent* AVRPawn::GetOculusHand(EHandType _HandType)
     return nullptr;
 }
 
-TArray<UJointMeshComponent*> AVRPawn::GetHandJointMeshes()
+const TArray<UJointMeshComponent*>& AVRPawn::GetHandJointMeshes()
 {
     return HandJointMeshes;
 }
-
 

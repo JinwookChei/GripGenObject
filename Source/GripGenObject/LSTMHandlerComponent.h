@@ -49,7 +49,14 @@ public:
 	TObjectPtr<UNNEModelData> NNEModelData;
 
 private:
+
+	class AVRPawn* OwnerPawn;
+	int SameCount = 0;
+	int PreIndex = 0;
+
 	TSharedPtr<FMyModelHelper> ModelHelper;
+
+
 
 	void InitializeNNEModel();
 

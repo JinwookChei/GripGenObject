@@ -29,11 +29,14 @@ void UHandTrackingDataComponent::BeginPlay()
 	// ...
     //OwnerRightHand = UGameplayStatics::GetPlayerCharacter(this, 0);
 
+    
     OwnerPawn = Cast<AVRPawn>(GetOwner());
     if (OwnerPawn)
     {
         OwnerRightHand = OwnerPawn->GetOculusHand(EHandType::RightHand);
         OwnerLeftHand = OwnerPawn->GetOculusHand(EHandType::LeftHand);
+
+        HandJointMeshes = OwnerPawn->GetHandJointMeshes();
     }
 
     TickCnt = 9999;
@@ -46,6 +49,7 @@ void UHandTrackingDataComponent::TickComponent(float DeltaTime, ELevelTick TickT
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+    CalculateRelativeJoint();
     ExportHandDatasToCSV_Loop();
 }
 
@@ -118,7 +122,6 @@ void UHandTrackingDataComponent::ExportHandDatasToCSV(UOculusXRHandComponent* _H
 {
     for (auto& HandJointMesh : _HandJointMeshes)
     {
-
         FVector JointLocation;
         FRotator JointRotation;
         if(HandJointMesh->GetName() == "Wrist Root")
@@ -132,8 +135,8 @@ void UHandTrackingDataComponent::ExportHandDatasToCSV(UOculusXRHandComponent* _H
             //FRotator RightHandRotation = OwnerRightHand->GetBoneRotationByName(HandJointMesh->GetFName(), EBoneSpaces::WorldSpace);
             FQuat RightHandQuat = OwnerRightHand->GetBoneQuaternion(HandJointMesh->GetFName(), EBoneSpaces::WorldSpace);
 
-            JointLocation = CameraLocation - RightHandLocation;
-            FQuat RelativeQuat = RightHandQuat* CameraQuat.Inverse();
+            JointLocation = RightHandLocation - CameraLocation;
+            FQuat RelativeQuat = RightHandQuat * CameraQuat.Inverse();
             JointRotation = RelativeQuat.Rotator();
 
             //JointLocation = CameraTransform.GetLocation() - RightHandLocation;
@@ -186,12 +189,59 @@ void UHandTrackingDataComponent::ExportHandDatasToCSV(UOculusXRHandComponent* _H
     GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, TEXT("Writing Hand Data File"));
 }
 
+void UHandTrackingDataComponent::ExportRelativeHandDatasToCSV(UOculusXRHandComponent* _Hand, EHandDataLabel _HandDataLabel)
+{
+    for (int i = 0; i < HandJointMeshes.Num(); i++)
+    {
+        CSVData += FString::Printf(TEXT("%f,%f,%f,"), HandJointRelativeRotations[i].Pitch, HandJointRelativeRotations[i].Yaw, HandJointRelativeRotations[i].Roll);
+        CSVData += FString::Printf(TEXT("%f,%f,%f,"), HandJointRelativeLocations[i].X, HandJointRelativeLocations[i].Y, HandJointRelativeLocations[i].Z);
+    }
+
+    switch (_HandDataLabel)
+    {
+    case EHandDataLabel::Idle:
+        CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::Idle);
+        break;
+    case EHandDataLabel::Pistol:
+        CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::Pistol);
+        break;
+    case EHandDataLabel::Drill:
+        CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::Drill);
+        break;
+    case EHandDataLabel::Sword:
+        CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::Sword);
+        break;
+    case EHandDataLabel::Dagger:
+        CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::Dagger);
+        break;
+    case EHandDataLabel::KitchenKnife:
+        CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::KitchenKnife);
+        break;
+    default:
+        break;
+    }
+
+    // Save the CSV data to the file
+    if (FFileHelper::SaveStringToFile(CSVData, *Filename))
+    {
+        UE_LOG(LogTemp, Log, TEXT("CSV file created successfully at %s"), *Filename);
+    }
+    else
+    {
+        UE_LOG(LogTemp, Error, TEXT("Failed to create CSV file at %s"), *Filename);
+    }
+
+    GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, TEXT("Writing Hand Data File"));
+}
+
 void UHandTrackingDataComponent::ExportHandDatasToCSV_Loop()
 {
     if (TickCnt < 2000)
     {
-        TArray<UJointMeshComponent*> OwnerHandJointMeshes = OwnerPawn->GetHandJointMeshes();
-        ExportHandDatasToCSV(OwnerRightHand, OwnerHandJointMeshes, HandDataLabel);
+        //TArray<UJointMeshComponent*> OwnerHandJointMeshes = OwnerPawn->GetHandJointMeshes();
+        //ExportHandDatasToCSV(OwnerRightHand, HandJointMeshes, HandDataLabel);
+        ExportRelativeHandDatasToCSV(OwnerRightHand, HandDataLabel);
+
         TickCnt++;
 
         if (TickCnt == 2000)
@@ -206,4 +256,102 @@ void UHandTrackingDataComponent::ExportHandDatasToCSV_Loop()
         }
     }
 }
+
+void UHandTrackingDataComponent::CalculateRelativeJoint()
+{
+    HandJointRelativeLocations.Empty();
+    HandJointRelativeRotations.Empty();
+
+    TArray<double> J;
+
+    // StartIndex = NextIndex of RootWrist
+    for (int i = 0; i < HandJointMeshes.Num(); i++)
+    {
+        if (i == 0)
+        {
+            UCameraComponent* OwnerCameraComponent = OwnerPawn->GetComponentByClass<UCameraComponent>();
+            FVector CameraLocation = OwnerCameraComponent->GetComponentLocation();
+            FVector WristRootJointLocation = HandJointMeshes[0]->GetComponentLocation();
+
+            FVector RelativeLocation = WristRootJointLocation - CameraLocation;
+            HandJointRelativeLocations.Add(RelativeLocation);
+
+
+            FQuat CameraQuat = OwnerCameraComponent->GetComponentQuat();
+            FQuat WristRootJointQuat = HandJointMeshes[0]->GetComponentQuat();
+            FQuat RelativeQuat = WristRootJointQuat * CameraQuat.Inverse();
+
+            FRotator RelativeRotation = RelativeQuat.Rotator();
+            HandJointRelativeRotations.Add(RelativeRotation);
+
+            J.Add(RelativeRotation.Pitch);
+            J.Add(RelativeRotation.Yaw);
+            J.Add(RelativeRotation.Roll);
+            J.Add(RelativeLocation.X);
+            J.Add(RelativeLocation.Y);
+            J.Add(RelativeLocation.Z);
+
+            //DrawDebugLine(GetWorld(), CameraLocation, WristRootJointLocation, FColor::Green, false, -1.0f);
+        }
+        else if (i == 1 || i == 6 || i == 10 || i == 14 || i == 18)
+        {
+            FVector ParentJointLocation = HandJointMeshes[0]->GetComponentLocation();
+            FVector ChildJointLocation = HandJointMeshes[i]->GetComponentLocation();
+            FVector RelativeLocation = ChildJointLocation - ParentJointLocation;
+            HandJointRelativeLocations.Add(RelativeLocation);
+
+            FQuat ParentJointQuat = HandJointMeshes[0]->GetComponentQuat();
+            FQuat ChildJointQuat = HandJointMeshes[i]->GetComponentQuat();
+
+            FQuat RelativeQuat = ChildJointQuat * ParentJointQuat.Inverse();
+            FRotator RelativeRotation = RelativeQuat.Rotator();
+            HandJointRelativeRotations.Add(RelativeRotation);
+
+            
+            J.Add(RelativeRotation.Pitch);
+            J.Add(RelativeRotation.Yaw);
+            J.Add(RelativeRotation.Roll);
+            J.Add(RelativeLocation.X);
+            J.Add(RelativeLocation.Y);
+            J.Add(RelativeLocation.Z);
+
+            DrawDebugLine(GetWorld(), ParentJointLocation, ChildJointLocation, FColor::Green, false, -1.0f);
+
+            //UE_LOG(LogTemp, Display, TEXT("%f,%f,%f   %f,%f,%f"), ParentJointLocation.X, ParentJointLocation.Y, ParentJointLocation.Z, ChildJointLocation.X, ChildJointLocation.Y, ChildJointLocation.Z);
+        }
+        else
+        {
+            FVector ParentJointLocation = HandJointMeshes[i - 1]->GetComponentLocation();
+            FVector ChildJointLocation = HandJointMeshes[i]->GetComponentLocation();
+            FVector RelativeLocation = ChildJointLocation - ParentJointLocation;
+            HandJointRelativeLocations.Add(RelativeLocation);
+
+            FQuat ParentJointQuat = HandJointMeshes[i - 1]->GetComponentQuat();
+            FQuat ChildJointQuat = HandJointMeshes[i]->GetComponentQuat();
+
+            FQuat RelativeQuat = ChildJointQuat * ParentJointQuat.Inverse();
+            FRotator RelativeRotation = RelativeQuat.Rotator();
+            HandJointRelativeRotations.Add(RelativeRotation);
+
+            J.Add(RelativeRotation.Pitch);
+            J.Add(RelativeRotation.Yaw);
+            J.Add(RelativeRotation.Roll);
+            J.Add(RelativeLocation.X);
+            J.Add(RelativeLocation.Y);
+            J.Add(RelativeLocation.Z);
+
+            DrawDebugLine(GetWorld(), ParentJointLocation, ChildJointLocation, FColor::Green, false, -1.0f);
+        }
+    }
+
+    OwnerPawn->JointSequenceData.Enqueue(J);
+    OwnerPawn->QueueCount++;
+    if (OwnerPawn->QueueCount > 80)
+    {
+        OwnerPawn->JointSequenceData.Pop();
+        OwnerPawn->QueueCount--;
+    }
+}
+
+
 

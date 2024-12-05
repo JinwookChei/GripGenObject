@@ -2,6 +2,7 @@
 
 
 #include "LSTMHandlerComponent.h"
+#include "VRPawn.h"
 
 
 // Sets default values for this component's properties
@@ -21,6 +22,7 @@ void ULSTMHandlerComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
+    OwnerPawn = Cast<AVRPawn>(GetOwner());
     InitializeNNEModel();
 }
 
@@ -145,13 +147,102 @@ void ULSTMHandlerComponent::ExecuteNNETickInference()
             // Process ModelHelper->OutputData from the previous run here
             // Fill in new data into ModelHelper->InputData here
 
-            ModelHelper->InputData = TestPistolData;
+            //ModelHelper->InputData = TestPistolData;
 
-            //UE_LOG(LogTemp, Display, TEXT("ModelHelper->InputData.Num() : %d"), ModelHelper->InputData.Num());
+            TArray<float> ResultArray;
+            TArray<double> TempArray;
+
+            if (OwnerPawn->QueueCount == 80)
+            {
+                TArray<float> InputSequence;
+                for (int i = 0; i < 80; i++)
+                {
+                    OwnerPawn->JointSequenceData.Dequeue(TempArray);
+
+                    for (double Value : TempArray)
+                    {
+                        ResultArray.Add(static_cast<float>(Value)); // double을 float로 변환하여 추가
+                    }
+
+                    OwnerPawn->JointSequenceData.Enqueue(TempArray);
+                }
+            }
+
+            ModelHelper->InputData = ResultArray;
+            
+
+            UE_LOG(LogTemp, Display, TEXT("ModelHelper->InputData.Num() : %d"), ModelHelper->InputData.Num());
+
+
+            float MaxOutput = 0;
+            int MaxIndex = 0;
+            FString Message;
+            FColor TextColor;
             for (int i = 0; i < ModelHelper->OutputData.Num(); i++)
             {
-                UE_LOG(LogTemp, Display, TEXT("ModelHelper->OutputData : %f"), ModelHelper->OutputData[i]);
+                if (MaxOutput < ModelHelper->OutputData[i] && ModelHelper->OutputData[i] > 0.9f)
+                {
+                    MaxOutput = ModelHelper->OutputData[i];
+                    MaxIndex = i;
+                }
             }
+
+            if (PreIndex == MaxIndex)
+            {
+                SameCount++;
+            }
+            else
+            {
+                SameCount = 0;
+            }
+
+            PreIndex = MaxIndex;
+
+            if(SameCount >= 5)
+            {
+                if (MaxIndex == 0)
+                {
+                    Message = TEXT("Idle");
+                    TextColor = FColor::Green;
+                }
+                else if (MaxIndex == 1)
+                {
+                    Message = TEXT("Pistal");
+                    TextColor = FColor::Purple;
+                }
+                else if (MaxIndex == 2)
+                {
+                    Message = TEXT("Drill");
+                    TextColor = FColor::Red;
+                }
+                else if (MaxIndex == 3)
+                {
+                    Message = TEXT("Sword");
+                    TextColor = FColor::Blue;
+                }
+                else if (MaxIndex == 4)
+                {
+                    Message = TEXT("Dagger");
+                    TextColor = FColor::Orange;
+                }
+                else if (MaxIndex == 5)
+                {
+                    Message = TEXT("KitchenKnife");
+                    TextColor = FColor::Yellow;
+                }
+
+                float DisplayTime = 0.5f; // 5초 동안 표시
+                // 메시지 출력 (키는 0부터 9999까지 임의로 설정 가능)
+                GEngine->AddOnScreenDebugMessage(-1, DisplayTime, TextColor, Message);
+            }
+            else
+            {
+                Message = TEXT("?????????");
+                TextColor = FColor::Black;
+            }
+
+            
+            
 
 
             ModelHelper->bIsRunning = true;

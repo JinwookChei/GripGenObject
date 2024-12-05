@@ -34,8 +34,20 @@ private:
 	EHandDataLabel HandDataLabel;
 
 	class AVRPawn* OwnerPawn;
+
 	UOculusXRHandComponent* OwnerRightHand;
+
 	UOculusXRHandComponent* OwnerLeftHand;
+
+	TArray<class UJointMeshComponent*> HandJointMeshes;
+
+	UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+	TArray<FVector> HandJointRelativeLocations;
+
+	UPROPERTY(VisibleAnywhere, Category = "Hand Joints")
+	TArray<FRotator> HandJointRelativeRotations;
+
+	
 
 protected:
 	UFUNCTION(BlueprintCallable)
@@ -49,6 +61,13 @@ private:
 	UFUNCTION()
 	void ExportHandDatasToCSV(class UOculusXRHandComponent* _Hand, TArray<class UJointMeshComponent*>& _HandJointMeshes, EHandDataLabel _HandDataLabel);
 
+	UFUNCTION()
+	void ExportRelativeHandDatasToCSV(class UOculusXRHandComponent* _Hand, EHandDataLabel _HandDataLabel);
+
+
 	void ExportHandDatasToCSV_Loop();
+
+public:
+	void CalculateRelativeJoint();
 	
 };
