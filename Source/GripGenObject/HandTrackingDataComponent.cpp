@@ -10,6 +10,8 @@
 #include "HandJoint.h"
 #include "TimerManager.h"
 #include "GGGGameInstance.h"
+#include "CommonTypes.h"
+
         
 
 

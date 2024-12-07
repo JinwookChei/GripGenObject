@@ -14,6 +14,7 @@
 #include "JointMeshComponent.h"
 #include "GGGGameInstance.h"
 #include "Kismet/GameplayStatics.h"
+#include "CommonTypes.h"
 
 // Sets default values
 AGGGPawn::AGGGPawn()
@@ -53,10 +54,12 @@ AGGGPawn::AGGGPawn()
     LeftHand->SetupAttachment(LeftController);
     LeftHand->SkeletonType = EOculusXRHandType::HandLeft;
 
+
     // 오른손 조인트 컴포넌트 생성
     RightHandJoints = CreateDefaultSubobject<UHandJoint>(TEXT("Right Hand Joints"));
     RightHandJoints->SetupAttachment(RightHand);
     RightHandJoints->HandType = EHandType::RightHand;
+    
 
     // 왼손 조인트 컴포넌트 생성
     LeftHandJoints = CreateDefaultSubobject<UHandJoint>(TEXT("Left Hand Joints"));

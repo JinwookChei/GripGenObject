@@ -14,6 +14,8 @@
 
 #include "Engine/AssetManager.h"
 
+#include"CommonTypes.h"
+
 
 // Sets default values
 AVRPawn::AVRPawn()
