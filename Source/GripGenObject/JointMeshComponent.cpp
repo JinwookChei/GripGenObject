@@ -3,12 +3,12 @@
 
 #include "JointMeshComponent.h"
 
-void UJointMeshComponent::SetHandJointType(EHandJoint _HandJointType)
+void UJointMeshComponent::SetHandJointType(EHandJointType _HandJointType)
 {
 	HandJointType = _HandJointType;
 }
 
-EHandJoint UJointMeshComponent::GetHandJointType()
+EHandJointType UJointMeshComponent::GetHandJointType()
 {
 	return HandJointType;
 }

@@ -3,6 +3,8 @@
 
 #include "LSTMHandlerComponent.h"
 #include "VRPawn.h"
+#include "GGGGameInstance.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values for this component's properties
@@ -13,6 +15,8 @@ ULSTMHandlerComponent::ULSTMHandlerComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	// ...
+
+    GGGGameInstance = Cast<UGGGGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 }
 
 
@@ -33,7 +37,7 @@ void ULSTMHandlerComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
-    ExecuteNNETickInference();
+    //ExecuteNNETickInference();
 }
 
 void ULSTMHandlerComponent::InitializeNNEModel()
@@ -51,7 +55,6 @@ void ULSTMHandlerComponent::InitializeNNEModel()
         {
             ModelHelper = MakeShared<FMyModelHelper>();
 
-            // TUniquePtr -> TSharedPtr·Î ¹Ù²î¾ú³ª?
             TSharedPtr<UE::NNE::IModelCPU> Model = Runtime->CreateModelCPU(NNEModelData);
 
             if (Model.IsValid())
@@ -137,7 +140,7 @@ void ULSTMHandlerComponent::InitializeNNEModel()
     }
 }
 
-void ULSTMHandlerComponent::ExecuteNNETickInference()
+void ULSTMHandlerComponent::ExecuteNNETickInference(TQueue<TArray<float>> _JointSequenceData)
 {
     if (ModelHelper.IsValid())
     {
@@ -152,10 +155,10 @@ void ULSTMHandlerComponent::ExecuteNNETickInference()
             TArray<float> ResultArray;
             TArray<double> TempArray;
 
-            if (OwnerPawn->QueueCount == 80)
+            if (OwnerPawn->QueueCount == GGGGameInstance->TimeStep)
             {
                 TArray<float> InputSequence;
-                for (int i = 0; i < 80; i++)
+                for (int i = 0; i < GGGGameInstance->TimeStep; i++)
                 {
                     OwnerPawn->JointSequenceData.Dequeue(TempArray);
 

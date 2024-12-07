@@ -29,14 +29,34 @@ private:
 
 	FString CSVData;
 
-	float TickCnt;
+	int32 TickCount;
 
+	int32 LearningSampleCount;
+
+	int32 LearningSampleNum;
+
+	int32 TimeStep;
+
+private:
 	EHandDataLabel HandDataLabel;
 
+	UPROPERTY()
+	class UHandJoint* RightHandJoint;
+
+	UPROPERTY()
+	class UHandJoint* LeftHandJoint;
+
+	FVector PreRightHandLocation;
+	FQuat PreRightHandQuat;
+	FVector PreLeftHandLocation;
+	FQuat PreLeftHandQuat;
+
+	UPROPERTY()
 	class AVRPawn* OwnerPawn;
 
+	UPROPERTY()
 	UOculusXRHandComponent* OwnerRightHand;
-
+	UPROPERTY()
 	UOculusXRHandComponent* OwnerLeftHand;
 
 	TArray<class UJointMeshComponent*> HandJointMeshes;
@@ -51,8 +71,7 @@ private:
 
 protected:
 	UFUNCTION(BlueprintCallable)
-	void StartWriteCSVData(EHandDataLabel _HandDataLabel);
-
+	void StartWriteCSVData(EHandDataLabel _HandDataLabel,  class UHandJoint* _RightHandJoint,  class UHandJoint* _LeftHandJoint);
 
 private:
 	UFUNCTION()
@@ -62,10 +81,10 @@ private:
 	void ExportHandDatasToCSV(class UOculusXRHandComponent* _Hand, TArray<class UJointMeshComponent*>& _HandJointMeshes, EHandDataLabel _HandDataLabel);
 
 	UFUNCTION()
-	void ExportRelativeHandDatasToCSV(class UOculusXRHandComponent* _Hand, EHandDataLabel _HandDataLabel);
-
+	void ExportRelativeHandDatasToCSV();
 
 	void ExportHandDatasToCSV_Loop();
+
 
 public:
 	void CalculateRelativeJoint();

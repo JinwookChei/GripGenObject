@@ -10,7 +10,7 @@
  * 
  */
 UENUM(BlueprintType) // Blueprint에서 사용 가능하도록 선언
-enum class EHandJoint : uint8
+enum class EHandJointType : uint8
 {
     WristRoot UMETA(DisplayName = "Wrist Root"),
 
@@ -48,10 +48,10 @@ class GRIPGENOBJECT_API UJointMeshComponent : public UStaticMeshComponent
 {
 	GENERATED_BODY()
 private:
-    EHandJoint HandJointType;
+    EHandJointType HandJointType;
 
 public:
-    void SetHandJointType(EHandJoint _HandJointType);
+    void SetHandJointType(EHandJointType _HandJointType);
 	
-    EHandJoint GetHandJointType();
+    EHandJointType GetHandJointType();
 };
