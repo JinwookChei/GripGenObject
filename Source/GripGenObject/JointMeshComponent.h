@@ -16,6 +16,10 @@ UCLASS()
 class GRIPGENOBJECT_API UJointMeshComponent : public UStaticMeshComponent
 {
 	GENERATED_BODY()
+
+public:
+    UJointMeshComponent();
+
 private:
     EHandJointType HandJointType;
 

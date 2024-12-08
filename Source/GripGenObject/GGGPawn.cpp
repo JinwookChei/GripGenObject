@@ -120,8 +120,8 @@ void AGGGPawn::PlaceJointOnXRHand()
 
     for (auto& LeftJoint : LeftJoints)
     {
-        FVector JointLocation = RightHand->GetBoneLocation(LeftJoint->GetFName(), EBoneSpaces::WorldSpace);
-        FRotator JointRotation = RightHand->GetBoneRotationByName(LeftJoint->GetFName(), EBoneSpaces::WorldSpace);
+        FVector JointLocation = LeftHand->GetBoneLocation(LeftJoint->GetFName(), EBoneSpaces::WorldSpace);
+        FRotator JointRotation = LeftHand->GetBoneRotationByName(LeftJoint->GetFName(), EBoneSpaces::WorldSpace);
 
         LeftJoint->SetWorldLocation(JointLocation);
         LeftJoint->SetWorldRotation(JointRotation);
