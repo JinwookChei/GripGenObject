@@ -114,6 +114,10 @@ void AGGGPawn::PlaceJointOnXRHand()
         USceneComponent* ParentJoint = RightJoint->GetAttachParent();
         FVector ParentJointLocation = ParentJoint->GetComponentLocation();
 
+        //UE_LOG(LogTemp, Display, TEXT("%s"), *RightJoint->GetStaticMesh();
+        
+        //UE_LOG(LogTemp, Display, TEXT("RightJoint Location : %f   %f   %f"), RightJoint->GetComponentLocation().X, RightJoint->GetComponentLocation().Y, RightJoint->GetComponentLocation().Z);
+        //UE_LOG(LogTemp, Display, TEXT("RightJoint Location : %f   %f   %f"), JointLocation.X, JointLocation.Y, JointLocation.Z);
         DrawDebugLine(GetWorld(), ParentJointLocation, JointLocation, FColor::Green, false, -1.0f);
         
     }

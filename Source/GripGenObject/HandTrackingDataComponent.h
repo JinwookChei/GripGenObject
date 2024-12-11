@@ -85,7 +85,6 @@ private:
 
 	void ExportHandDatasToCSV_Loop();
 
-
 public:
 	void CalculateRelativeJoint();
 	

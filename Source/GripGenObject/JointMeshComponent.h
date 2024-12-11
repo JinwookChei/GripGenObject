@@ -22,6 +22,9 @@ public:
 
 private:
     EHandJointType HandJointType;
+protected:
+    virtual void BeginPlay() override;
+
 
 public:
     void SetHandJointType(EHandJointType _HandJointType);
