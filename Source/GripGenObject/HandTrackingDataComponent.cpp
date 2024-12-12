@@ -249,20 +249,23 @@ void UHandTrackingDataComponent::ExportHandDatasToCSV(UOculusXRHandComponent* _H
         case EHandDataLabel::Idle:
             CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::Idle);
             break;
-        case EHandDataLabel::Pistol:
-            CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::Pistol);
-            break;
-        case EHandDataLabel::Drill:
-            CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::Drill);
+        case EHandDataLabel::Bow:
+            CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::Bow);
             break;
         case EHandDataLabel::Sword:
             CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::Sword);
             break;
-        case EHandDataLabel::Dagger:
-            CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::Dagger);
+        case EHandDataLabel::Pistol:
+            CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::Pistol);
             break;
-        case EHandDataLabel::KitchenKnife:
-            CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::KitchenKnife);
+        case EHandDataLabel::MachineGun:
+            CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::MachineGun);
+            break;
+        case EHandDataLabel::Spear:
+            CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::Spear);
+            break;
+        case EHandDataLabel::Grenade:
+            CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::Grenade);
             break;
         default:
             break;
@@ -416,21 +419,23 @@ void UHandTrackingDataComponent::ExportRelativeHandDatasToCSV()
         case EHandDataLabel::Idle:
             CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::Idle);
             break;
-        case EHandDataLabel::Pistol:
-            CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::Pistol);
-            break;
-        case EHandDataLabel::Drill:
-            CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::Drill);
+        case EHandDataLabel::Bow:
+            CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::Bow);
             break;
         case EHandDataLabel::Sword:
             CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::Sword);
             break;
-        case EHandDataLabel::Dagger:
-            CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::Dagger);
+        case EHandDataLabel::Pistol:
+            CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::Pistol);
             break;
-        case EHandDataLabel::KitchenKnife:
-            CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::KitchenKnife);
+        case EHandDataLabel::MachineGun:
+            CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::MachineGun);
             break;
+        case EHandDataLabel::Spear:
+            CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::Spear);
+            break;
+        case EHandDataLabel::Grenade:
+            CSVData += FString::Printf(TEXT("%d\n"), EHandDataLabel::Grenade);
         default:
             break;
     }   
@@ -451,12 +456,46 @@ void UHandTrackingDataComponent::ExportRelativeHandDatasToCSV()
 void UHandTrackingDataComponent::ExportHandDatasToCSV_Loop()
 {
 
-    if (LearningSampleCount >= LearningSampleNum)
-    {
-        return;
-    }
+    //if (LearningSampleCount >= LearningSampleNum)
+    //{
+    //    return;
+    //}
 
-    if (TickCount < TimeStep)
+    //if (TickCount < TimeStep)
+    //{
+    //    ExportRelativeHandDatasToCSV();
+    //    TickCount++;
+
+    //    //메시지 내용, 메시지 키, 출력 시간(초), 텍스트 색상 지정
+    //    //FString Message = TEXT("Hand Data Recording - %d   /   %d", TickCount, TimeStep);
+    //    FString Message = FString::Printf(TEXT("Hand Data Recording  -  %d / %d"), TickCount, TimeStep);
+    //    FColor TextColor = FColor::Red;
+    //    float DisplayTime = -1.0f;
+
+    //    // 메시지 출력 (키는 0부터 9999까지 임의로 설정 가능)
+    //    GEngine->AddOnScreenDebugMessage(-1, DisplayTime, TextColor, Message);
+    //}
+    //else if (TickCount == TimeStep)
+    //{
+    //    TickCount = 9999;
+
+    //    FTimerHandle TimerHandle;
+    //    GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this]()
+    //        {
+    //            TickCount = 0;
+    //            LearningSampleCount++;
+
+    //             //메시지 내용, 메시지 키, 출력 시간(초), 텍스트 색상 지정
+    //            FString Message = TEXT("Repeat Export Hand Data!!!!");
+    //            FColor TextColor = FColor::Green;
+    //            float DisplayTime = 1.0f; 
+
+    //            // 메시지 출력 (키는 0부터 9999까지 임의로 설정 가능)
+    //            GEngine->AddOnScreenDebugMessage(-1, DisplayTime, TextColor, Message);
+    //        }, -1.0f, false);
+
+
+    if (TickCount < 4000)
     {
         ExportRelativeHandDatasToCSV();
         TickCount++;
@@ -470,24 +509,23 @@ void UHandTrackingDataComponent::ExportHandDatasToCSV_Loop()
         // 메시지 출력 (키는 0부터 9999까지 임의로 설정 가능)
         GEngine->AddOnScreenDebugMessage(-1, DisplayTime, TextColor, Message);
     }
-    else if (TickCount == TimeStep)
+    else
     {
         TickCount = 9999;
+        //FTimerHandle TimerHandle;
+        //GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this]()
+        //    {
+        //        TickCount = 0;
+        //        LearningSampleCount++;
 
-        FTimerHandle TimerHandle;
-        GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this]()
-            {
-                TickCount = 0;
-                LearningSampleCount++;
+        //        //메시지 내용, 메시지 키, 출력 시간(초), 텍스트 색상 지정
+        //        FString Message = TEXT("Repeat Export Hand Data!!!!");
+        //        FColor TextColor = FColor::Green;
+        //        float DisplayTime = 1.0f;
 
-                 //메시지 내용, 메시지 키, 출력 시간(초), 텍스트 색상 지정
-                FString Message = TEXT("Repeat Export Hand Data!!!!");
-                FColor TextColor = FColor::Green;
-                float DisplayTime = 1.0f; 
-
-                // 메시지 출력 (키는 0부터 9999까지 임의로 설정 가능)
-                GEngine->AddOnScreenDebugMessage(-1, DisplayTime, TextColor, Message);
-            }, 3.0f, false);
+        //        // 메시지 출력 (키는 0부터 9999까지 임의로 설정 가능)
+        //        GEngine->AddOnScreenDebugMessage(-1, DisplayTime, TextColor, Message);
+        //    }, -1.0f, false);
     }
 
     //if (TickCount < 2000)

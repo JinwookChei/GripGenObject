@@ -225,7 +225,7 @@ void ULSTMHandlerComponent::ExecuteNNETickInference(TQueue<TArray<float>>& _Join
             FColor TextColor;
             for (int i = 0; i < ModelHelper->OutputData.Num(); i++)
             {
-                if (MaxOutput < ModelHelper->OutputData[i] && ModelHelper->OutputData[i] > 0.8f)
+                if (MaxOutput < ModelHelper->OutputData[i] && ModelHelper->OutputData[i] > 0.9f)
                 {
                     MaxOutput = ModelHelper->OutputData[i];
                     MaxIndex = i;
@@ -247,33 +247,38 @@ void ULSTMHandlerComponent::ExecuteNNETickInference(TQueue<TArray<float>>& _Join
             {
                 if (MaxIndex == 0)
                 {
-                    Message = TEXT("Bow");
-                    TextColor = FColor::Green;
+                    Message = TEXT("???");
+                    TextColor = FColor::Black;
                 }
                 else if (MaxIndex == 1)
                 {
-                    Message = TEXT("Sword");
+                    Message = TEXT("Bow");
                     TextColor = FColor::Purple;
                 }
                 else if (MaxIndex == 2)
                 {
-                    Message = TEXT("Pistol");
+                    Message = TEXT("Sword");
                     TextColor = FColor::Red;
                 }
                 else if (MaxIndex == 3)
                 {
-                    Message = TEXT("MachineGun");
+                    Message = TEXT("Pistol");
                     TextColor = FColor::Blue;
                 }
                 else if (MaxIndex == 4)
                 {
-                    Message = TEXT("Spear");
+                    Message = TEXT("MachineGun");
                     TextColor = FColor::Orange;
                 }
                 else if (MaxIndex == 5)
                 {
-                    Message = TEXT("Granade");
+                    Message = TEXT("Spear");
                     TextColor = FColor::Yellow;
+                }
+                else if (MaxIndex == 6)
+                {
+                    Message = TEXT("Grenade");
+                    TextColor = FColor::Cyan;
                 }
 
                 float DisplayTime = 0.5f; // 5초 동안 표시
