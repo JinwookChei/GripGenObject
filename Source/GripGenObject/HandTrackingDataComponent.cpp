@@ -78,7 +78,12 @@ void UHandTrackingDataComponent::StartWriteCSVData(EHandDataLabel _HandDataLabel
     RightHandJoint = _RightHandJoint;
     LeftHandJoint = _LeftHandJoint;
     
-    Initialize_CSVData();
+
+    FTimerHandle TimerHandle;
+    GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this]()
+        {
+            Initialize_CSVData();
+        }, 3.0f, false);
 }
 
 void UHandTrackingDataComponent::Initialize_CSVData()
@@ -147,8 +152,8 @@ void UHandTrackingDataComponent::Initialize_CSVData()
     CSVData += TEXT("L_Thumb2_Relative_Loc_X,L_Thumb2_Relative_Loc_Y,L_Thumb2_Relative_Loc_Z,");
     CSVData += TEXT("R_Thumb3_Relative_Loc_X,R_Thumb3_Relative_Loc_Y,R_Thumb3_Relative_Loc_Z,");
     CSVData += TEXT("L_Thumb3_Relative_Loc_X,L_Thumb3_Relative_Loc_Y,L_Thumb3_Relative_Loc_Z,");
-    CSVData += TEXT("R_Thumb_Tip_Relative_Loc_X,R_Thumb_Tip_Relative_Loc_Y,R_Thumb_Tip_Relative_Loc_Z,");
-    CSVData += TEXT("L_Thumb_Tip_Relative_Loc_X,L_Thumb_Tip_Relative_Loc_Y,L_Thumb_Tip_Relative_Loc_Z,");
+    //CSVData += TEXT("R_Thumb_Tip_Relative_Loc_X,R_Thumb_Tip_Relative_Loc_Y,R_Thumb_Tip_Relative_Loc_Z,");
+    //CSVData += TEXT("L_Thumb_Tip_Relative_Loc_X,L_Thumb_Tip_Relative_Loc_Y,L_Thumb_Tip_Relative_Loc_Z,");
 
 
     CSVData += TEXT("R_Index1_Relative_Loc_X,R_Index1_Relative_Loc_Y,R_Index1_Relative_Loc_Z,");
@@ -157,8 +162,8 @@ void UHandTrackingDataComponent::Initialize_CSVData()
     CSVData += TEXT("L_Index2_Relative_Loc_X,L_Index2_Relative_Loc_Y,L_Index2_Relative_Loc_Z,");
     CSVData += TEXT("R_Index3_Relative_Loc_X,R_Index3_Relative_Loc_Y,R_Index3_Relative_Loc_Z,");
     CSVData += TEXT("L_Index3_Relative_Loc_X,L_Index3_Relative_Loc_Y,L_Thumb3_Relative_Loc_Z,");
-    CSVData += TEXT("R_Index_Tip_Relative_Loc_X,R_Index_Tip_Relative_Loc_Y,R_Index_Tip_Relative_Loc_Z,");
-    CSVData += TEXT("L_Index_Tip_Relative_Loc_X,L_Index_Tip_Relative_Loc_Y,L_Index_Tip_Relative_Loc_Z,");
+    //CSVData += TEXT("R_Index_Tip_Relative_Loc_X,R_Index_Tip_Relative_Loc_Y,R_Index_Tip_Relative_Loc_Z,");
+    //CSVData += TEXT("L_Index_Tip_Relative_Loc_X,L_Index_Tip_Relative_Loc_Y,L_Index_Tip_Relative_Loc_Z,");
 
 
     CSVData += TEXT("R_Middle1_Relative_Loc_X,R_Middle1_Relative_Loc_Y,R_Middle1_Relative_Loc_Z,");
@@ -167,8 +172,8 @@ void UHandTrackingDataComponent::Initialize_CSVData()
     CSVData += TEXT("L_Middle2_Relative_Loc_X,L_Middle2_Relative_Loc_Y,L_Middle2_Relative_Loc_Z,");
     CSVData += TEXT("R_Middle3_Relative_Loc_X,R_Middle3_Relative_Loc_Y,R_Middle3_Relative_Loc_Z,");
     CSVData += TEXT("L_Middle3_Relative_Loc_X,L_Middle3_Relative_Loc_Y,L_Middle3_Relative_Loc_Z,");
-    CSVData += TEXT("R_Middle_Tip_Relative_Loc_X,R_Middle_Tip_Relative_Loc_Y,R_Middle_Tip_Relative_Loc_Z,");
-    CSVData += TEXT("L_Middle_Tip_Relative_Loc_X,L_Middle_Tip_Relative_Loc_Y,L_Middle_Tip_Relative_Loc_Z,");
+    //CSVData += TEXT("R_Middle_Tip_Relative_Loc_X,R_Middle_Tip_Relative_Loc_Y,R_Middle_Tip_Relative_Loc_Z,");
+    //CSVData += TEXT("L_Middle_Tip_Relative_Loc_X,L_Middle_Tip_Relative_Loc_Y,L_Middle_Tip_Relative_Loc_Z,");
 
 
     CSVData += TEXT("R_Ring1_Relative_Loc_X,R_Ring1_Relative_Loc_Y,R_Ring1_Relative_Loc_Z,");
@@ -177,8 +182,8 @@ void UHandTrackingDataComponent::Initialize_CSVData()
     CSVData += TEXT("L_Ring2_Relative_Loc_X,L_Ring2_Relative_Loc_Y,L_Ring2_Relative_Loc_Z,");
     CSVData += TEXT("R_Ring3_Relative_Loc_X,R_Ring3_Relative_Loc_Y,R_Ring3_Relative_Loc_Z,");
     CSVData += TEXT("L_Ring3_Relative_Loc_X,L_Ring3_Relative_Loc_Y,L_Ring3_Relative_Loc_Z,");
-    CSVData += TEXT("R_Ring_Tip_Relative_Loc_X,R_Ring_Tip_Relative_Loc_Y,R_Ring_Tip_Relative_Loc_Z,");
-    CSVData += TEXT("L_Ring_Tip_Relative_Loc_X,L_Ring_Tip_Relative_Loc_Y,L_Ring_Tip_Relative_Loc_Z,");
+    //CSVData += TEXT("R_Ring_Tip_Relative_Loc_X,R_Ring_Tip_Relative_Loc_Y,R_Ring_Tip_Relative_Loc_Z,");
+    //CSVData += TEXT("L_Ring_Tip_Relative_Loc_X,L_Ring_Tip_Relative_Loc_Y,L_Ring_Tip_Relative_Loc_Z,");
 
 
     CSVData += TEXT("R_Pinky0_Relative_Loc_X,R_Pinky0_Relative_Loc_Y,R_Pinky0_Relative_Loc_Z,");
@@ -189,8 +194,8 @@ void UHandTrackingDataComponent::Initialize_CSVData()
     CSVData += TEXT("L_Pinky2_Relative_Loc_X,L_Pinky2_Relative_Loc_Y,L_Pinky2_Relative_Loc_Z,");
     CSVData += TEXT("R_Pinky3_Relative_Loc_X,R_Pinky3_Relative_Loc_Y,R_Pinky3_Relative_Loc_Z,");
     CSVData += TEXT("L_Pinky3_Relative_Loc_X,L_Pinky3_Relative_Loc_Y,L_Pinky3_Relative_Loc_Z,");
-    CSVData += TEXT("R_Pinky_Tip_Relative_Loc_X,R_Pinky_Tip_Relative_Loc_Y,R_Pinky_Tip_Relative_Loc_Z,");
-    CSVData += TEXT("L_Pinky_Tip_Relative_Loc_X,L_Pinky_Tip_Relative_Loc_Y,L_Pinky_Tip_Relative_Loc_Z,");
+    //CSVData += TEXT("R_Pinky_Tip_Relative_Loc_X,R_Pinky_Tip_Relative_Loc_Y,R_Pinky_Tip_Relative_Loc_Z,");
+    //CSVData += TEXT("L_Pinky_Tip_Relative_Loc_X,L_Pinky_Tip_Relative_Loc_Y,L_Pinky_Tip_Relative_Loc_Z,");
     
 
     CSVData += TEXT("Label\n");
@@ -328,7 +333,11 @@ void UHandTrackingDataComponent::ExportRelativeHandDatasToCSV()
     TArray<UJointMeshComponent*> LeftJointArray = LeftHandJoint->GetJointArray();
     for (int i = 0; i < RightJointArray.Num(); i++)
     {
-        if(i == 0)
+        if (i == 5 || i==9 || i==13 || i==17 || i==22)
+        {
+
+        }
+        else if(i == 0)
         {
             FVector R_WristRoot_Loc_Acc = RightJointArray[0]->GetComponentLocation() - PreRightHandLocation;
             FQuat R_WristRoot_Quat_Acc = RightJointArray[0]->GetComponentQuat() * PreRightHandQuat.Inverse();
@@ -346,11 +355,54 @@ void UHandTrackingDataComponent::ExportRelativeHandDatasToCSV()
         }
         else
         {
-            FVector R_RightJoint_Rel_Loc = RightJointArray[i]->GetRelativeLocation();
-            FVector L_RightJoint_Rel_Loc = LeftJointArray[i]->GetRelativeLocation();
+            ///*FVector R_RightJoint_Rel_Loc = RightJointArray[i]->GetRelativeLocation();
+            //FVector L_RightJoint_Rel_Loc = LeftJointArray[i]->GetRelativeLocation();*/
 
-            CSVData += FString::Printf(TEXT("%f,%f,%f,"), R_RightJoint_Rel_Loc.X, R_RightJoint_Rel_Loc.Y, R_RightJoint_Rel_Loc.Z);
-            CSVData += FString::Printf(TEXT("%f,%f,%f,"), L_RightJoint_Rel_Loc.X, L_RightJoint_Rel_Loc.Y, L_RightJoint_Rel_Loc.Z);
+            //FVector R_RightJoint_Loc = RightJointArray[i]->GetComponentLocation();
+            //FVector L_RightJoint_Loc = LeftJointArray[i]->GetComponentLocation();
+
+            //FQuat R_WristRootQuat = RightJointArray[0]->GetComponentQuat();
+            //FQuat L_WristRootQuat = LeftJointArray[0]->GetComponentQuat();
+
+            //USceneComponent* R_ParentComponent= RightJointArray[i]->GetAttachParent();
+            //USceneComponent* L_ParentComponent = LeftJointArray[i]->GetAttachParent();
+
+            //FVector R_ParentJointLocation = R_ParentComponent->GetComponentLocation();
+            //FVector L_ParentJointLocation = L_ParentComponent->GetComponentLocation();
+
+            //FVector R_RelativeLocation = R_RightJoint_Loc - R_ParentJointLocation;
+            //FVector L_RelativeLocation = L_RightJoint_Loc - L_ParentJointLocation;
+
+            //R_RelativeLocation = R_WristRootQuat.RotateVector(R_RelativeLocation);
+            //L_RelativeLocation = L_WristRootQuat.RotateVector(L_RelativeLocation);
+
+
+            ///*CSVData += FString::Printf(TEXT("%f,%f,%f,"), R_RightJoint_Rel_Loc.X, R_RightJoint_Rel_Loc.Y, R_RightJoint_Rel_Loc.Z);
+            //CSVData += FString::Printf(TEXT("%f,%f,%f,"), L_RightJoint_Rel_Loc.X, L_RightJoint_Rel_Loc.Y, L_RightJoint_Rel_Loc.Z);*/
+
+            //CSVData += FString::Printf(TEXT("%f,%f,%f,"), R_RelativeLocation.X, R_RelativeLocation.Y, R_RelativeLocation.Z);
+            //CSVData += FString::Printf(TEXT("%f,%f,%f,"), L_RelativeLocation.X, L_RelativeLocation.Y, L_RelativeLocation.Z);
+
+
+            ////////////////////// 회전 계산.
+            FQuat R_RightJoint_Qaut = RightJointArray[i]->GetComponentQuat();
+            FQuat L_RightJoint_Qaut = LeftJointArray[i]->GetComponentQuat();
+
+            USceneComponent* R_ParentComponent= RightJointArray[i]->GetAttachParent();
+            USceneComponent* L_ParentComponent = LeftJointArray[i]->GetAttachParent();
+
+            FQuat R_Parent_RightJoint_Quat = R_ParentComponent->GetComponentQuat();
+            FQuat L_Parent_LeftJoint_Quat = L_ParentComponent->GetComponentQuat();
+
+            FRotator R_RightJoint_Rot = (R_Parent_RightJoint_Quat.Inverse() * R_RightJoint_Qaut).Rotator();
+            FRotator L_RightJoint_Rot = (L_Parent_LeftJoint_Quat.Inverse() * L_RightJoint_Qaut).Rotator();
+
+            CSVData += FString::Printf(TEXT("%f,%f,%f,"), R_RightJoint_Rot.Pitch, R_RightJoint_Rot.Yaw, R_RightJoint_Rot.Roll);
+            CSVData += FString::Printf(TEXT("%f,%f,%f,"), L_RightJoint_Rot.Pitch, L_RightJoint_Rot.Yaw, L_RightJoint_Rot.Roll);
+
+            /*FRotator R_RightJoint_Rel_Rot = 
+            FRotator L_RightJoint_Rel_Rot*/
+
         }
     }
 

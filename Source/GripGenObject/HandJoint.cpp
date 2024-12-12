@@ -21,6 +21,7 @@ void UHandJoint::BeginPlay()
 	// Wrist Root
 	Wrist_Root = NewObject<UJointMeshComponent>(this, FName(TEXT("Wrist Root")));
 	Wrist_Root->SetHandJointType(EHandJointType::WristRoot);
+	Wrist_Root->SetWorldScale3D(FVector(0.01f, 0.01f, 0.01f));
 	Wrist_Root->AttachToComponent(this, FAttachmentTransformRules::KeepRelativeTransform);
 	//Wrist_Root->SetWorldScale3D(FVector(0.01f, 0.01f, 0.01f));
 	

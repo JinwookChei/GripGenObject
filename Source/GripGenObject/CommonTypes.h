@@ -18,12 +18,12 @@ enum class EHandType : uint8
 UENUM(BlueprintType) // Blueprint에서 사용 가능하도록 선언
 enum class EHandDataLabel : uint8
 {
-    Idle UMETA(DisplayName = "Idle"),
-    Pistol UMETA(DisplayName = "Pistol"),
-    Drill UMETA(DisplayName = "Drill"),
-    Sword UMETA(DisplayName = "Sword"),
-    Dagger UMETA(DisplayName = "Dagger"),
-    KitchenKnife UMETA(DisplayName = "KitchenKnife")
+    Idle UMETA(DisplayName = "Bow"),
+    Pistol UMETA(DisplayName = "Sword"),
+    Drill UMETA(DisplayName = "Pistol"),
+    Sword UMETA(DisplayName = "MachineGun"),
+    Dagger UMETA(DisplayName = "Spear"),
+    KitchenKnife UMETA(DisplayName = "Grenade")
 };
 
 UENUM(BlueprintType) // Blueprint에서 사용 가능하도록 선언

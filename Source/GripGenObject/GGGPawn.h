@@ -66,6 +66,7 @@ private:
 	class UGGGGameInstance* GGGGameInstance;
 private:
 	TQueue<TArray<float>> JointSequenceData;
+public:
 	int QueueCount = 0;
 
 	FVector PreRightHandLocation;

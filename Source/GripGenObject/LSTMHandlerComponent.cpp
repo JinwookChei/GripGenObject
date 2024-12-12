@@ -5,6 +5,7 @@
 #include "VRPawn.h"
 #include "GGGGameInstance.h"
 #include "Kismet/GameplayStatics.h"
+#include "GGGPawn.h"
 
 
 // Sets default values for this component's properties
@@ -16,6 +17,11 @@ ULSTMHandlerComponent::ULSTMHandlerComponent()
 
 	// ...
 
+    
+    
+
+
+
     GGGGameInstance = Cast<UGGGGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 }
 
@@ -25,8 +31,40 @@ void ULSTMHandlerComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
-    OwnerPawn = Cast<AVRPawn>(GetOwner());
+	// ..
+    AActor* OwnerActor = GetOwner();
+    if (OwnerActor)
+    {
+        OwnerPawn = Cast<AGGGPawn>(OwnerActor);
+    }
+    else
+    {
+        UE_LOG(LogTemp, Display, TEXT("OnwerActor NULL!!!!!!!!"));
+    }
+
+    //OwnerPawn = Cast<AVRPawn>(GetOwner());
+
+    //if (OwnerPawn)
+    //{
+    //    UE_LOG(LogTemp, Display, TEXT("NOTNULL!!!!!!!!"));
+    //}
+    //else
+    //{
+    //    UE_LOG(LogTemp, Display, TEXT("NULL!!!!!!!!"));
+    //}
+
+
+
+    //OwnerPawn = Cast<AVRPawn>(GetOwner());
+    //if (OwnerPawn)
+    //{
+    //    UE_LOG(LogTemp, Display, TEXT("NOt NULL!!!!!!!!!!!"));
+    //}
+    //else
+    //{
+
+    //    UE_LOG(LogTemp, Display, TEXT("NULL!!!!!!!!!!!"));
+    //}
     InitializeNNEModel();
 }
 
@@ -42,6 +80,7 @@ void ULSTMHandlerComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 
 void ULSTMHandlerComponent::InitializeNNEModel()
 {
+
     // Example for automated loading
     if (NNEModelData)
     {
@@ -140,8 +179,9 @@ void ULSTMHandlerComponent::InitializeNNEModel()
     }
 }
 
-void ULSTMHandlerComponent::ExecuteNNETickInference(TQueue<TArray<float>> _JointSequenceData)
+void ULSTMHandlerComponent::ExecuteNNETickInference(TQueue<TArray<float>>& _JointSequenceData)
 {
+
     if (ModelHelper.IsValid())
     {
         // Example for async inference
@@ -153,21 +193,23 @@ void ULSTMHandlerComponent::ExecuteNNETickInference(TQueue<TArray<float>> _Joint
             //ModelHelper->InputData = TestPistolData;
 
             TArray<float> ResultArray;
-            TArray<double> TempArray;
+            TArray<float> TempArray;
 
             if (OwnerPawn->QueueCount == GGGGameInstance->TimeStep)
             {
-                TArray<float> InputSequence;
+                //TArray<float> InputSequence;
                 for (int i = 0; i < GGGGameInstance->TimeStep; i++)
                 {
-                    OwnerPawn->JointSequenceData.Dequeue(TempArray);
+                    //OwnerPawn->JointSequenceData.Dequeue(TempArray);
+                    _JointSequenceData.Dequeue(TempArray);
 
                     for (double Value : TempArray)
                     {
-                        ResultArray.Add(static_cast<float>(Value)); // double을 float로 변환하여 추가
+                        //ResultArray.Add(static_cast<float>(Value)); // double을 float로 변환하여 추가
+                        ResultArray.Add(Value);
                     }
 
-                    OwnerPawn->JointSequenceData.Enqueue(TempArray);
+                    _JointSequenceData.Enqueue(TempArray);
                 }
             }
 
@@ -183,7 +225,7 @@ void ULSTMHandlerComponent::ExecuteNNETickInference(TQueue<TArray<float>> _Joint
             FColor TextColor;
             for (int i = 0; i < ModelHelper->OutputData.Num(); i++)
             {
-                if (MaxOutput < ModelHelper->OutputData[i] && ModelHelper->OutputData[i] > 0.9f)
+                if (MaxOutput < ModelHelper->OutputData[i] && ModelHelper->OutputData[i] > 0.8f)
                 {
                     MaxOutput = ModelHelper->OutputData[i];
                     MaxIndex = i;
@@ -201,36 +243,36 @@ void ULSTMHandlerComponent::ExecuteNNETickInference(TQueue<TArray<float>> _Joint
 
             PreIndex = MaxIndex;
 
-            if(SameCount >= 5)
+            if(SameCount >= 20)
             {
                 if (MaxIndex == 0)
                 {
-                    Message = TEXT("Idle");
+                    Message = TEXT("Bow");
                     TextColor = FColor::Green;
                 }
                 else if (MaxIndex == 1)
                 {
-                    Message = TEXT("Pistal");
+                    Message = TEXT("Sword");
                     TextColor = FColor::Purple;
                 }
                 else if (MaxIndex == 2)
                 {
-                    Message = TEXT("Drill");
+                    Message = TEXT("Pistol");
                     TextColor = FColor::Red;
                 }
                 else if (MaxIndex == 3)
                 {
-                    Message = TEXT("Sword");
+                    Message = TEXT("MachineGun");
                     TextColor = FColor::Blue;
                 }
                 else if (MaxIndex == 4)
                 {
-                    Message = TEXT("Dagger");
+                    Message = TEXT("Spear");
                     TextColor = FColor::Orange;
                 }
                 else if (MaxIndex == 5)
                 {
-                    Message = TEXT("KitchenKnife");
+                    Message = TEXT("Granade");
                     TextColor = FColor::Yellow;
                 }
 
